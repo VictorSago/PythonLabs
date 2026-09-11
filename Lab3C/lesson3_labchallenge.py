@@ -134,14 +134,26 @@ flight_stats = {
 
 # Calculate all the relevant statistics
 for flight in flights:
+    # Status (computed once, stored on the flight itself)
     if flight["cancelled"]:
+        flight["status"] = "CANCELLED"
         flight_stats["cancelled"] += 1
-    elif flight["delay_minutes"] > 0:
+    elif flight["delay_minutes"] >= 1:
         flight_stats["delayed"] += 1
         flight_stats["total_delay_minutes"] += flight["delay_minutes"]
+        if flight["delay_minutes"] >= 60:
+            flight["status"] = "SEVERELY DELAYED"
+        elif flight["delay_minutes"] >= 20:
+            flight["status"] = "DELAYED"
+        else:
+            flight["status"] = "SLIGHT DELAY"
     else:
+        flight["status"] = "ON TIME"
         flight_stats["on_time"] += 1
-    
+
+    # Gate display (computed once, stored on the flight itself)
+    flight["gate_display"] = flight["gate"] if flight["gate"] is not None else "Gate not assigned"
+
     # Skip 0-passenger flights when building the "active" average -
     # continue is used here because there's nothing to add
     if flight["passengers"] == 0:
@@ -167,7 +179,7 @@ if flight_stats["delayed"] > 0:
     flight_stats["avg_delay"] = flight_stats["total_delay_minutes"] / flight_stats["delayed"]
 
 
-# --- Menu loop ---
+# Menu loop
 menu_choice = ""
 
 while True:
@@ -187,22 +199,9 @@ while True:
 
     if menu_choice == "1":
         for flight_index, flight in enumerate(flights, start=1):
-            if flight["cancelled"]:
-                status = "CANCELLED"
-            elif flight["delay_minutes"] >= 60:
-                status = "SEVERELY DELAYED"
-            elif flight["delay_minutes"] >= 20:
-                status = "DELAYED"
-            elif flight["delay_minutes"] >= 1:
-                status = "SLIGHT DELAY"
-            else:
-                status = "ON TIME"
-
-            gate_display = flight["gate"] if flight["gate"] is not None else "Gate not assigned"
-
             print(
                 f"{flight_index}. {flight['flight_number']} - {flight['destination']} - "
-                f"{flight['departure_time']} - {gate_display} - {status}"
+                f"{flight['departure_time']} - {flight['gate_display']} - {flight['status']}"
             )
         continue
 
@@ -213,17 +212,8 @@ while True:
             if flight["delay_minutes"] == 0:
                 continue  # nothing to show in a delayed-only view
 
-            if flight["delay_minutes"] >= 60:
-                status = "SEVERELY DELAYED"
-            elif flight["delay_minutes"] >= 20:
-                status = "DELAYED"
-            else:
-                status = "SLIGHT DELAY"
-            
-            gate_display = flight["gate"] if flight["gate"] is not None else "Gate not assigned"
-
             print(f"{flight['flight_number']} - {flight['destination']} - "
-                  f"{flight['departure_time']} - {gate_display} - {status}")
+                  f"{flight['departure_time']} - {flight['gate']} - {flight['status']}")
         continue
 
     if menu_choice == "3":
@@ -243,27 +233,12 @@ while True:
                 break  # stop searching once found
 
         if found_flight is not None:
-            gate_display = (
-                found_flight["gate"] if found_flight["gate"] is not None else "Gate not assigned"
-            )
-
-            if found_flight["cancelled"]:
-                status = "CANCELLED"
-            elif found_flight["delay_minutes"] >= 60:
-                status = "SEVERELY DELAYED"
-            elif found_flight["delay_minutes"] >= 20:
-                status = "DELAYED"
-            elif found_flight["delay_minutes"] >= 1:
-                status = "SLIGHT DELAY"
-            else:
-                status = "ON TIME"
-
             print()
             print("Destination:", found_flight["destination"])
             print("Departure:", found_flight["departure_time"])
-            print("Gate:", gate_display)
+            print("Gate:", found_flight['gate'])
             print("Passengers:", found_flight["passengers"])
-            print("Status:", status)
+            print("Status:", found_flight['status'])
         else:
             print("Flight not found.")
         continue
@@ -284,32 +259,6 @@ while True:
 
     print("Invalid option, please choose 1-6.")
 
-# ==========================================================
-# Part 9 - Control the processing (review)
-# ==========================================================
-#
-# break usage:
-# - Menu option 4 (search): breaks out of the search loop as soon as the
-#   matching flight is found. Purpose: there's only ever one flight with
-#   a given flight number, so continuing to scan the rest of the list after
-#   a match is pure wasted work.
-# - The menu loop itself breaks out when the user chooses "6". Purpose: this 
-#   is the only way to end an infinite `while True` menu loop - without it
-#   the program could never exit.
-#
-# continue usage:
-# - The stats-gathering loop: `continue` skips a flight with 0 passengers
-#   before modifying the `total_passengers` count, determining overcapacity,
-#   or comparing with the busiest flight. Purpose: those lines don't apply to
-#   a 0-passenger flight.
-# - Every branch of the menu loop ends in `continue`. Purpose: after handling
-#   one menu option, control should go straight back to showing the menu again 
-#   rather than falling through to the "invalid option" message at the bottom.
-
-
-# ============================================================
-# FINAL CHALLENGE - Airport Operations Report
-# ============================================================
 
 busiest = flight_stats["busiest"]
 
@@ -330,3 +279,65 @@ for flight in flight_stats["over_capacity"]:
 print()
 # Additional analysis: average delay among delayed flights
 print("Average delay (delayed flights only):", round(flight_stats["avg_delay"], 2), "minutes")
+
+
+# ==========================================================
+# Part 9 - Control the processing (review)
+# ==========================================================
+# 
+# break usage:
+# - Menu option 4 (search): breaks out of the search loop as soon as the
+#   matching flight is found. Purpose: there's only ever one flight with
+#   a given flight number, so continuing to scan the rest of the list after
+#   a match is pure wasted work.
+# - The menu loop itself breaks out when the user chooses "6". Purpose: this 
+#   is the only way to end an infinite `while True` menu loop - without it
+#   the program could never exit.
+#
+# continue usage:
+# - The stats-gathering loop: `continue` skips a flight with 0 passengers
+#   before modifying the `total_passengers` count, determining overcapacity,
+#   or comparing with the busiest flight. Purpose: those lines don't apply to
+#   a 0-passenger flight.
+# - Every branch of the menu loop ends in `continue`. Purpose: after handling
+#   one menu option, control should go straight back to showing the menu again 
+#   rather than falling through to the "invalid option" message at the bottom.
+
+# ==========================================================
+# DESIGN CHALLENGE
+# ==========================================================
+# 
+# Improvement 1
+# What the original solution did:
+#   Tracked flight statistics as several separate loose variables 
+#   (total_scheduled_flights, cancelled_count, delayed_count, etc.)
+# What was changed:
+#   Consolidated all of these into a single flight_stats dictionary,
+#   and replaced active_passenger_flight_count with a more meaningful
+#   empty_flights counter (flights - empty_flights = active flights).
+# Why the new solution is better:
+#   One named collection instead of many loose variables is easier to 
+#   keep track of, print, and extend later (e.g. adding avg_delay
+#   for the last part of the lab). empty_flights is also a fact about the 
+#   airport in its own right, whereas active_passenger_flight_count only ever
+#   existed to make one division work - the new version's data
+#   structure choice matches what it's actually modeling.
+#
+# Improvement 2
+# What the original solution did:
+#   Menu option 1 (view all flights) and option 4 (search) each
+#   independently recomputed a flight's status (CANCELLED / SEVERELY
+#   DELAYED / DELAYED / SLIGHT DELAY / ON TIME) and gate display
+#   ("Gate not assigned" fallback) using the same if/elif chain,
+#   duplicated verbatim in two places.
+# What was changed:
+#   Computed status and gate_display once per flight during the initial stats
+#   loop, storing them directly as extra keys on each flight's dictionary 
+#   (`flight["status"]`, `flight["gate_display"]`). Menu options 1 and 4 now
+#   just read these values from flight's `dict` instead of recalculating them.
+# Why the new solution is better:
+#   Removes unnecessary repetition - the status rules are now written in
+#   exactly one place, so a future rule change only needs to happen once 
+#   instead of being kept in sync across every place status is displayed. 
+#   It also avoids unnecessary processing, since a flight's status/gate
+#   display no longer gets recomputed from scratch every time.
