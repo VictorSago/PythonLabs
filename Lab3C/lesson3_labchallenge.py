@@ -124,20 +124,21 @@ flight_stats = {
     "delayed": 0,
     "on_time": 0,
     "total_passengers": 0,
-    "over_capacity": 0,
+    "over_capacity": [],
     "busiest": None,
     "empty_flights": 0,
     "avg_passengers": 0,
+    "total_delay_minutes": 0,
+    "avg_delay": 0
 }
 
-# For the average, only "active" flights count
-
-
+# Calculate all the relevant statistics
 for flight in flights:
     if flight["cancelled"]:
         flight_stats["cancelled"] += 1
     elif flight["delay_minutes"] > 0:
         flight_stats["delayed"] += 1
+        flight_stats["total_delay_minutes"] += flight["delay_minutes"]
     else:
         flight_stats["on_time"] += 1
     
@@ -150,15 +151,21 @@ for flight in flights:
     flight_stats["total_passengers"] += flight["passengers"]
 
     if flight["passengers"] / flight["max_capacity"] > 0.8:
-        flight_stats["over_capacity"] += 1
+        flight_stats["over_capacity"].append(flight)
     
     busiest_unset = flight_stats["busiest"] is None
     if busiest_unset or flight["passengers"] > flight_stats["busiest"]["passengers"]:
         flight_stats["busiest"] = flight
 
+# To make calculation of average passengers easier
 active_flights = flight_stats["total_scheduled"] - flight_stats["empty_flights"]
+
 if active_flights != 0:
     flight_stats["avg_passengers"] = flight_stats["total_passengers"] / active_flights
+
+if flight_stats["delayed"] > 0:
+    flight_stats["avg_delay"] = flight_stats["total_delay_minutes"] / flight_stats["delayed"]
+
 
 # --- Menu loop ---
 menu_choice = ""
@@ -272,8 +279,54 @@ while True:
         print("Average passengers:", round(flight_stats["avg_passengers"], 2))
         print(f"Busiest flight: {busiest['flight_number']} - {busiest['destination']} - "
               f"{busiest['passengers']} passengers")
-        print("Flights above 80% capacity:", flight_stats["over_capacity"])
+        print("Flights above 80% capacity:", len(flight_stats["over_capacity"]))
         continue
 
     print("Invalid option, please choose 1-6.")
 
+# ==========================================================
+# Part 9 - Control the processing (review)
+# ==========================================================
+#
+# break usage:
+# - Menu option 4 (search): breaks out of the search loop as soon as the
+#   matching flight is found. Purpose: there's only ever one flight with
+#   a given flight number, so continuing to scan the rest of the list after
+#   a match is pure wasted work.
+# - The menu loop itself breaks out when the user chooses "6". Purpose: this 
+#   is the only way to end an infinite `while True` menu loop - without it
+#   the program could never exit.
+#
+# continue usage:
+# - The stats-gathering loop: `continue` skips a flight with 0 passengers
+#   before modifying the `total_passengers` count, determining overcapacity,
+#   or comparing with the busiest flight. Purpose: those lines don't apply to
+#   a 0-passenger flight.
+# - Every branch of the menu loop ends in `continue`. Purpose: after handling
+#   one menu option, control should go straight back to showing the menu again 
+#   rather than falling through to the "invalid option" message at the bottom.
+
+
+# ============================================================
+# FINAL CHALLENGE - Airport Operations Report
+# ============================================================
+
+busiest = flight_stats["busiest"]
+
+print("\nAIRPORT OPERATIONS REPORT\n")
+print("Scheduled flights:", flight_stats["total_scheduled"])
+print("Cancelled flights:", flight_stats["cancelled"])
+print("Delayed flights:", flight_stats["delayed"])
+print("On-time flights:", flight_stats["on_time"])
+print()
+print("Passengers today:", flight_stats["total_passengers"])
+print()
+print("Busiest flight:")
+print(f"{busiest['flight_number']} - {busiest['destination']} - {busiest['passengers']} passengers")
+print()
+print("Flights above 80% capacity:")
+for flight in flight_stats["over_capacity"]:
+    print(f"{flight['flight_number']} - {flight['destination']}")
+print()
+# Additional analysis: average delay among delayed flights
+print("Average delay (delayed flights only):", round(flight_stats["avg_delay"], 2), "minutes")
