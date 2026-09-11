@@ -207,10 +207,9 @@ while True:
 
     if menu_choice == "2":
         for flight in flights:
-            if flight["cancelled"]:
-                continue  # cancelled flights are never "delayed"
-            if flight["delay_minutes"] == 0:
-                continue  # nothing to show in a delayed-only view
+            # cancelled flights are never "delayed"
+            if flight["cancelled"] or flight["delay_minutes"] == 0:
+                continue  
 
             print(f"{flight['flight_number']} - {flight['destination']} - "
                   f"{flight['departure_time']} - {flight['gate']} - {flight['status']}")
@@ -258,7 +257,6 @@ while True:
         continue
 
     print("Invalid option, please choose 1-6.")
-
 
 busiest = flight_stats["busiest"]
 
