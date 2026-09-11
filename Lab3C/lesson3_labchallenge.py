@@ -116,9 +116,6 @@ for terminal in terminal_letters:
     for gate_number in gate_numbers:
         print(f"Gate {terminal}{gate_number}")
 
-# ============================================================
-# PART 8 - Interactive Airport Menu
-# ============================================================
 
 # Precompute flight statistics once, before the menu starts
 flight_stats = {
@@ -129,11 +126,12 @@ flight_stats = {
     "total_passengers": 0,
     "over_capacity": 0,
     "busiest": None,
+    "empty_flights": 0,
     "avg_passengers": 0,
 }
 
 # For the average, only "active" flights count
-nonzero_passengers = 0
+
 
 for flight in flights:
     if flight["cancelled"]:
@@ -146,9 +144,9 @@ for flight in flights:
     # Skip 0-passenger flights when building the "active" average -
     # continue is used here because there's nothing to add
     if flight["passengers"] == 0:
+        flight_stats["empty_flights"] += 1
         continue
     
-    nonzero_passengers += 1
     flight_stats["total_passengers"] += flight["passengers"]
 
     if flight["passengers"] / flight["max_capacity"] > 0.8:
@@ -158,7 +156,9 @@ for flight in flights:
     if busiest_unset or flight["passengers"] > flight_stats["busiest"]["passengers"]:
         flight_stats["busiest"] = flight
 
-flight_stats["avg_passengers"] = flight_stats["total_passengers"] / nonzero_passengers
+active_flights = flight_stats["total_scheduled"] - flight_stats["empty_flights"]
+if active_flights != 0:
+    flight_stats["avg_passengers"] = flight_stats["total_passengers"] / active_flights
 
 # --- Menu loop ---
 menu_choice = ""
