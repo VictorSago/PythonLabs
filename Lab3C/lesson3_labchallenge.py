@@ -210,3 +210,12 @@ if found_flight is not None:
     print("Status:", status)
 else:
     print("Flight not found.")
+
+
+# Gate overview
+terminal_letters = ["A", "B", "C"]
+gate_numbers = range(1, 5)
+
+for terminal in terminal_letters:
+    for gate_number in gate_numbers:
+        print(f"Gate {terminal}{gate_number}")
