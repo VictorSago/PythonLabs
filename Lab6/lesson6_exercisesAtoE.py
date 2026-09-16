@@ -263,7 +263,8 @@ print(words_by_length)
 students = [
     {"name": "Alice", "score": 85},
     {"name": "Bob", "score": 72},
-    {"name": "Carla", "score": 91},
+    {"name": "Charles", "score": 91},
+    {"name": "Diana", "score": 84}
 ]
 
 students_ascending = sorted(students, key=lambda student: student["score"])
