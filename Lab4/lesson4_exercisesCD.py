@@ -77,7 +77,7 @@ def count_even(numbers):
 
 print(count_even([1, 2, 3, 4, 5, 6, 7, 8]))
 
-# 3. get_long_words(words, minimum_length) - returning a new list
+# 3. get_long_words(words, minimum_length) and return a new list
 def get_long_words(words, minimum_length):
     long_words = []
     for word in words:
