@@ -116,11 +116,11 @@ clearer_alternative = {
 print(clearer_alternative)
 
 # Why the clearer version wins:
-# The over-complicated version packs three separate concerns - name cleaning, 
+# The over-complicated version packs three separate concerns - name cleaning,
 # stock/price filtering, and value classification - into one dense expression
 # with two stacked if-clauses and a nested ternary. Understanding it means
 # mentally unpacking all three at once. The clearer version names each step:
-# a filter (from Ex 2), then a classification function with an obvious name, 
-# and finally, a comprehension step. In this way, each piece can be read, 
+# a filter (in Ex 2), then a classification function with an obvious name,
+# and finally, a comprehension step. In this way, each piece can be read,
 # tested, and reused independently. It's a few more lines, but each line
 # answers one question instead of one line answering all three.
