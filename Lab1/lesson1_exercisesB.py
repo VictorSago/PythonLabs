@@ -1,4 +1,8 @@
 
+# ==========================================================
+# Part B - User input and calculations
+# ==========================================================
+
 from datetime import date
 
 # Part B - Input and calculations
@@ -29,5 +33,6 @@ room_perimeter = 2 * room_length + 2 *room_width
 print(f"Room area is {room_area}, and the perimeter is {room_perimeter}")
 
 # Ex 5
-# If the input to one of these programs had been "hello" (except for the first input asking for a name)
-# the program would stop execution and exit with a "ValueError".
+# If the input to one of these programs had been "hello" (except for the  first
+# input asking for a name) the program would stop execution and exit with a 
+# "ValueError".

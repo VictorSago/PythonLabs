@@ -1,5 +1,7 @@
 
-# Part F - Stretch Challenges
+# ==========================================================
+# Part F - Stretch challenges Python Foundation
+# ==========================================================
 
 # Ex 1
 total_seconds = int(input("Total seconds: "))

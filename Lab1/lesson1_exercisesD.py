@@ -1,5 +1,7 @@
 
-# Part D - Strings 2
+# ==========================================================
+# Part D - String investigation
+# ==========================================================
 
 # Ex 1
 some_sentence = "A long sentence with many words."

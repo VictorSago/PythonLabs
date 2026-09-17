@@ -1,5 +1,7 @@
 
-# Part E - Applied Challenge
+# ==========================================================
+# Part E - Applied challenge: Registration summary
+# ==========================================================
 
 first_name = input("First name: ").strip()
 last_name = input("Last name: ").strip()
