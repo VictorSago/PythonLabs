@@ -1,4 +1,8 @@
 
+# ==========================================================
+# Part G - Applied challenge: Console study tracker
+# ==========================================================
+
 # 1. A list of dictionaries representing at least ten study sessions
 # with subject and minutes.
 study_sessions = [

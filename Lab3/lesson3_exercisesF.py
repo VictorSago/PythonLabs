@@ -1,4 +1,8 @@
 
+# ==========================================================
+# Part F - break and continue
+# ==========================================================
+
 # 1. Loop through numbers 1-100 and stop when you reach the first
 # number divisible by both 7 and 9.
 for number in range(1, 101):
@@ -25,7 +29,6 @@ for name in names:
         print("Found:", name)
         found = True
         break
-
 # If the loop finished without hitting 'break', 'found' is still False -
 # that's how we know the target was never matched.
 if not found:

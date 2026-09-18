@@ -1,4 +1,8 @@
 
+# ==========================================================
+# Part D - range, enumerate and nested loops
+# ==========================================================
+
 # 1. Use range to print 10 down to 1.
 for number in range(10, 0, -1):
     print(number)

@@ -1,4 +1,8 @@
 
+# ==========================================================
+# Part B - Truthy, falsy and membership
+# ==========================================================s
+
 # 1. Examples with empty/non-empty string, zero/non-zero integer,
 # empty/non-empty list - tested directly in an if statement.
 
@@ -39,8 +43,8 @@ if non_empty_list:
 else:
     print("non_empty_list is falsy")
 
-# 2. Check whether a language exists in a 
-# predefined list of supported languages.
+
+# 2. Check whether a language exists in a predefined list of supported languages.
 print("--2--")
 supported_languages = ["python", "javascript", "java", "c++", "rust"]
 
@@ -50,6 +54,7 @@ if chosen_language.lower() in supported_languages:
     print(chosen_language, "is supported")
 else:
     print(chosen_language, "is not supported")
+
 
 # 3. Check whether a username is in the list of blocked usernames
 # and reject it if it appears in the list.
@@ -62,6 +67,7 @@ if supplied_username in blocked_usernames:
     print("Username is blocked. Please choose another.")
 else:
     print("Username accepted.")
+
 
 # 4. Use `not` to express at least two conditions in a readable way.
 print("--4--")

@@ -1,4 +1,5 @@
 
+# ==========================================================
 # Part 1 - Design the conference data
 # ==========================================================
 
@@ -113,7 +114,7 @@ sessions = [
     },
 ]
 
-
+# ==========================================================
 # Part 2 - Work with the schedule
 # ==========================================================
 print("--- Part 2 ---")
@@ -141,7 +142,7 @@ partial_schedule = sessions[2:5]
 print(partial_schedule)
 print()
 
-
+# ==========================================================
 # Part 3 - Conference changes
 # ==========================================================
 print("--- Part 3 ---")
@@ -200,7 +201,7 @@ print("Participants:", len(participants))
 print("Participant list:", participants)
 print()
 
-
+# ==========================================================
 # Part 4 - Unique conference information
 # ==========================================================
 print("--- Part 4 ---")
@@ -243,7 +244,7 @@ any_workshop = workshop_a | workshop_b
 print("Registered for either workshop:", any_workshop)
 print()
 
-
+# ==========================================================
 # Part 5 - Conference configuration
 # ==========================================================
 print("--- Part 5 ---")
@@ -278,7 +279,7 @@ start_date, end_date = conference_dates
 print("Runs from", start_date, "to", end_date)
 print()
 
-
+# ==========================================================
 # Part 6 - The shared-reference problem
 # ==========================================================
 print("--- Part 6 ---")
@@ -314,6 +315,7 @@ print("Same object?", participants is safe_backup_participants)  # False
 print("Different lengths:", len(participants), "vs", len(safe_backup_participants))
 print()
 
+# ==========================================================
 # Extra challenge - What happens when the list contains dictionaries
 # and we use .copy()?
 # ==========================================================
@@ -321,7 +323,6 @@ print("--- Extra ---")
 
 # Reuse safe_backup_participants from Part 6, which was created with
 # participants.copy()
-
 # Change a value inside one of the dictionaries in the copied list
 safe_backup_participants[0]["email"] = "changed_email@example.com"
 
@@ -346,7 +347,7 @@ print("Same dict object?", participants[0] is safe_backup_participants[0])  # Tr
 # recursively copies nested objects too, not just the outer list.
 print()
 
-
+# ==========================================================
 # Part 7 - Restructure the data
 # ==========================================================
 print("--- Part 7 ---")
@@ -415,7 +416,7 @@ print("Second session's room:", restructured_sessions[1]["room"])
 # together.
 print()
 
-
+# ==========================================================
 # Final Challenge - Build the Complete Conference State
 # ==========================================================
 print("---Final Challenge ---")
@@ -454,9 +455,9 @@ print("First participant:", conference["participants"][0]["name"])
 print("Contact email:", conference["contact"][1])
 print("Workshop A registrants:", conference["workshops"]["Workshop A"])
 
-# ------------------------------------------------------------
+# ----------------------------------------------------------
 # Make at least 5 changes using appropriate collection operations
-# ------------------------------------------------------------
+# ----------------------------------------------------------
 
 # 1. Add a new topic (set operation: add)
 conference["topics"].add("Networking")
@@ -487,9 +488,9 @@ print("Rooms now:", conference["rooms"])
 print("Total participants:", len(conference["participants"]))
 print("First speaker's skills now:", conference["speakers"][0]["skills"])
 
-# ============================================================
-# DESIGN EXPLANATION
-# ============================================================
+# ==========================================================
+# Design Explanation
+# ==========================================================
 
 # 10. Where did you use a list, and why was a list suitable?
 #     Lists were used for `sessions`, `participants`, `rooms`, and

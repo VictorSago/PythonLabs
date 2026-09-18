@@ -1,4 +1,8 @@
 
+# ==========================================================
+# Part C - For loops
+# ==========================================================
+
 # 1. Loop over a list of names and print a numbered greeting for each.
 names = ["Alice", "Bob", "Carla", "David"]
 

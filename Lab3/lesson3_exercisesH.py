@@ -1,4 +1,8 @@
 
+# ==========================================================
+# Part H - Stretch challenges
+# ==========================================================
+
 # 1. Print FizzBuzz from 1 to 100:
 # multiples of 3 -> Fizz, 5 -> Buzz, both -> FizzBuzz.
 for number in range(1, 101):
