@@ -110,7 +110,9 @@ flights = [
     }
 ]
 
-# Gate overview
+# ==========================================================
+# Part 7 - Gate overview
+# ==========================================================
 terminal_letters = ["A", "B", "C"]
 gate_numbers = range(1, 5)
 
@@ -119,6 +121,9 @@ for terminal in terminal_letters:
         print(f"Gate {terminal}{gate_number}")
 
 
+# ==========================================================
+# Part 3 & 4 - Determine flight status & analyse the flights
+# ==========================================================
 # Precompute flight statistics once, before the menu starts
 flight_stats = {
     "total_scheduled": len(flights),
@@ -154,6 +159,7 @@ for flight in flights:
         flight_stats["on_time"] += 1
 
     # Gate display (computed once, stored on the flight itself)
+    # "Gate not assigned" fallback is Part 6's unavailable-flight handling
     flight["gate_display"] = flight["gate"] if flight["gate"] is not None else "Gate not assigned"
 
     # Skip 0-passenger flights when building the "active" average -
@@ -181,7 +187,9 @@ if flight_stats["delayed"] > 0:
     flight_stats["avg_delay"] = flight_stats["total_delay_minutes"] / flight_stats["delayed"]
 
 
-# Menu loop
+# ==========================================================
+# Part 8 - Interactive Airport Menu
+# ==========================================================
 menu_choice = ""
 
 while True:
@@ -199,6 +207,7 @@ while True:
         print("Goodbye!")
         break  # done - exit the menu loop entirely
 
+    # Option 1 - View all flights (Part 2: process the departure board)
     if menu_choice == "1":
         for flight_index, flight in enumerate(flights, start=1):
             print(
@@ -214,7 +223,7 @@ while True:
                 continue  
 
             print(f"{flight['flight_number']} - {flight['destination']} - "
-                  f"{flight['departure_time']} - {flight['gate']} - {flight['status']}")
+                  f"{flight['departure_time']} - {flight['gate_display']} - {flight['status']}")
         continue
 
     if menu_choice == "3":
@@ -237,7 +246,7 @@ while True:
             print()
             print("Destination:", found_flight["destination"])
             print("Departure:", found_flight["departure_time"])
-            print("Gate:", found_flight['gate'])
+            print("Gate:", found_flight['gate_display'])
             print("Passengers:", found_flight["passengers"])
             print("Status:", found_flight['status'])
         else:
@@ -260,6 +269,9 @@ while True:
 
     print("Invalid option, please choose 1-6.")
 
+# ==========================================================
+# Final Challenge - Airport Operations Report
+# ==========================================================
 busiest = flight_stats["busiest"]
 
 print("\nAIRPORT OPERATIONS REPORT\n")
