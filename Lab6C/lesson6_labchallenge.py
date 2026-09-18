@@ -99,7 +99,7 @@ player_score_summary = [
     {"name": name, "tournament_score": score, "ranking_points": points}
     for name, score, points in zip(player_names, scores_by_player.values(), ranking_points)
 ]
-short_zip_example = list(zip(["Anna", "David", "Sara"], [10, 20]))
+short_zip_example = list(zip(["Alice", "Bob", "Carla"], [10, 20]))
 # zip() stops when the shortest input collection is exhausted.
 # Therefore, only two pairs are produced in short_zip_example.
 
@@ -121,3 +121,66 @@ print("Players ranked by wins:", ranking_by_wins)
 print("Players ranked by matches:", ranking_by_matches)
 print("Players sorted by name:", ranking_by_name)
 print("Players ranked by score, ascending:", ranking_by_score_asc)
+
+
+
+# Part 7 - Ranked tournament report
+print("\nTOURNAMENT LEADERBOARD")
+for position, player in enumerate(ranking_by_score, start=1):
+    print(f"{position}. {player['name']} - {player['score']} points")
+
+
+# Part 8 - Team analysis
+print("--- Part 8 ---")
+PARTICULAR_TEAM = "Phoenix"
+MANY_WINS = 4
+particular_team_players = [player["name"] for player in cleaned_players if player["team"] == PARTICULAR_TEAM]
+players_with_many_wins = [
+    player["name"] for player in cleaned_players if player["wins"] > MANY_WINS
+]
+active_players_above_threshold = {
+    player["name"]: player["score"]
+    for player in cleaned_players                                   # Can be simplified by using `active_players` from Part 3
+    if player["active"] and player["score"] >= SCORE_THRESHOLD
+}
+print(f"All players in team {PARTICULAR_TEAM}: {particular_team_players}")
+print(f"All players with more than {MANY_WINS} wins: {players_with_many_wins}")
+print("Represented teams:", unique_teams)   # From Part 4
+print("Represented countries:", unique_countries)   # From Part 4
+print(f"Active players that reached the score of {SCORE_THRESHOLD}:", active_players_above_threshold)
+
+
+# Part 9 - Player performance
+# Performance rewards score and wins, while also considering match efficiency.
+# The score is intentionally simple and transparent.
+print("--- Part 9 ---")
+TOP_PERFORMANCE_THRESHOLD = 1800
+
+players_with_performance = [
+    {
+        **player,
+        "performance": round(
+            player["score"] + player["wins"] * 50
+            + (player["wins"] / player["matches"]) * 100,
+            2,
+        ),
+    }
+    for player in cleaned_players
+]
+performance_ranking = sorted(
+    players_with_performance,
+    key=lambda player: player["performance"],
+    reverse=True,
+)
+top_performers = performance_ranking[:5]
+players_above_performance_threshold = [
+    player for player in performance_ranking
+    if player["performance"] >= TOP_PERFORMANCE_THRESHOLD
+]
+performance_by_player = {
+    player["name"]: player["performance"] for player in players_with_performance
+}
+print("Players ranked by performance:", performance_ranking)
+print("Top 5 performers:", top_performers)
+print(f"Players performing above {TOP_PERFORMANCE_THRESHOLD}:", players_above_performance_threshold)
+print("Performance for each player:", performance_by_player)
