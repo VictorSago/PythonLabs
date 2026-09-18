@@ -1,6 +1,6 @@
 
 # ============================================================
-# PART E - Decomposition
+# Part E - Decomposition
 # ============================================================
 
 # 1. Temperature report using separate functions for conversion,

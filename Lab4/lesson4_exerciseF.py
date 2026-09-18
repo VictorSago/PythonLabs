@@ -1,6 +1,6 @@
 
 # ==========================================================
-# PART F - Applied challenge: Event registration processor
+# Part F - Applied challenge: Event registration processor
 # ==========================================================
 
 # 1. Core functions: normalize name, validate age, calculate fee,

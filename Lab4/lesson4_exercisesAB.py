@@ -1,6 +1,6 @@
 
 # ==========================================================
-# PART A - Function fundamentals
+# Part A - Function fundamentals
 # ==========================================================
 
 # 1. greet(), show_course_name(), print_separator() - called more than once
@@ -84,7 +84,7 @@ print("Room area:", room_area)
 print("Total carpet cost:", total_cost)
 
 # ==========================================================
-# PART B - Return values
+# Part B - Return values
 # ==========================================================
 
 # 1. is_even(number) returning True/False

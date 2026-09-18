@@ -1,6 +1,6 @@
 
 # ==========================================================
-# PART C - Defaults and keyword arguments
+# Part C - Defaults and keyword arguments
 # ==========================================================
 
 # 1. greet(name, greeting='Hello'). Test positional and keyword arguments.
@@ -53,7 +53,7 @@ for user in users:
 #   SyntaxError: non-default argument follows default argument
 
 # ==========================================================
-# PART D - Functions and collections
+# Part D - Functions and collections
 # ==========================================================
 
 # 1. calculate_total(numbers) manually using a loop

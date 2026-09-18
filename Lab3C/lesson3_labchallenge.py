@@ -1,5 +1,7 @@
 
-# Lab 3 Challenge
+# ==========================================================
+# Lab 3 Challenge: Airport Departure Management System
+# ==========================================================
 
 # Departure Data
 # A list of dictionaries: one dictionary per flight, since each flight is
@@ -302,7 +304,7 @@ print("Average delay (delayed flights only):", round(flight_stats["avg_delay"], 
 #   rather than falling through to the "invalid option" message at the bottom.
 
 # ==========================================================
-# DESIGN CHALLENGE
+# Design Challenge
 # ==========================================================
 # 
 # Improvement 1

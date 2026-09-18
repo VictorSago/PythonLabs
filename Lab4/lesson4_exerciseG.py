@@ -1,6 +1,6 @@
 
 # ==========================================================
-# PART G - Stretch challenges
+# Part G - Stretch challenges
 # ==========================================================
 
 # 1. Return both minimum and maximum from a list. Return two values.
