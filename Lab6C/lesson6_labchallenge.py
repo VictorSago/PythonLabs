@@ -6,34 +6,58 @@
 
 # Helper functions for printing player dicts as well 
 # as dicts with different internal structure
-def format_dict_values(data, bool_labels=None):
-    """Return a single-line ' - ' joined summary of any dict's values.
+def format_dict_values(data, fields=None, bool_labels=None, sep=" - "):
+    """Return a single-line summary of any dict's values, joined by `separator`.
 
-    Works regardless of which keys are present, in whatever order the
-    dict defines them. Boolean values are converted to a readable label
-    instead of True/False; `bool_labels` lets specific keys use custom
-    wording (e.g. {"active": ("Active", "Inactive")}), and any other
-    boolean falls back to "Yes"/"No".
+    Works regardless of which keys are present. `fields` optionally selects
+    and orders which keys to include (defaults to all of the dict's keys,
+    in their existing order). Boolean values are converted to a readable
+    label instead of True/False; `bool_labels` lets specific keys use
+    custom wording (e.g. {"active": ("Active", "Inactive")}), and any
+    other boolean falls back to "Yes"/"No".
     """
     bool_labels = bool_labels or {}
+    keys = fields if fields is not None else data.keys()
+
     parts = []
-    for key, value in data.items():
+    for key in keys:
+        value = data[key]
         if isinstance(value, bool):
             active_label, inactive_label = bool_labels.get(key, ("Yes", "No"))
             value = active_label if value else inactive_label
         parts.append(str(value))
-    return " - ".join(parts)
+
+    return sep.join(parts)
 
 
-def format_dict_list(dicts, bool_labels=None):
-    """Return a multi-line string, one formatted dict per line."""
-    return "\n".join(format_dict_values(d, bool_labels) for d in dicts)
+def format_dict_list(dicts, fields=None, bool_labels=None, sep=" - "):
+    """Return a multi-line string: a header line of key names, then one
+    formatted dict per line, all joined using `separator`.
+    """
+    if not dicts:
+        return ""
 
-def format_player(player):
-    return format_dict_values(player, bool_labels={"active": ("Active", "Inactive")})
+    header_keys = fields if fields is not None else dicts[0].keys()
+    header = sep.join(header_keys)
 
-def format_player_list(players):
-    return format_dict_list(players, bool_labels={"active": ("Active", "Inactive")})
+    rows = "\n".join(
+        format_dict_values(d, fields, bool_labels, sep) for d in dicts
+    )
+    return f"{header}\n{rows}"
+
+
+def format_player(player, separator=" - "):
+    """Return a single-line summary of one player dict."""
+    return format_dict_values(
+        player, bool_labels={"active": ("Active", "Inactive")}, sep=separator
+    )
+
+
+def format_player_list(players, separator=" - "):
+    """Return a header line plus one formatted player per line."""
+    return format_dict_list(
+        players, bool_labels={"active": ("Active", "Inactive")}, sep=separator
+    )
 
 
 # Part 1 - Tournament data
