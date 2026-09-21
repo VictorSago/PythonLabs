@@ -139,8 +139,8 @@ players_with_many_wins = [
 ]
 active_players_above_threshold = {
     player["name"]: player["score"]
-    for player in cleaned_players                                   # Can be simplified by using `active_players` from Part 3
-    if player["active"] and player["score"] >= SCORE_THRESHOLD
+    for player in active_players
+    if player["score"] >= SCORE_THRESHOLD
 }
 # print(f"All players in team {PARTICULAR_TEAM}: {particular_team_players}")
 # print(f"All players with more than {MANY_WINS} wins: {players_with_many_wins}")
@@ -305,5 +305,7 @@ for player in cleaned_players:
     )
     if is_qualified:
         qualified_names.append(player["name"])
-# The clearer version separates the condition from the collection-building step.
+# The clearer version separates the condition from the collection-building
+# step, rather than cramming four chained conditions onto one comprehension
+# line where they're hard to scan.
 print("Qualified names example for complicated selection:", qualified_names)
