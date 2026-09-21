@@ -123,7 +123,6 @@ print("Players sorted by name:", ranking_by_name)
 print("Players ranked by score, ascending:", ranking_by_score_asc)
 
 
-
 # Part 7 - Ranked tournament report
 print("\nTOURNAMENT LEADERBOARD")
 for position, player in enumerate(ranking_by_score, start=1):
@@ -184,3 +183,85 @@ print("Players ranked by performance:", performance_ranking)
 print("Top 5 performers:", top_performers)
 print(f"Players performing above {TOP_PERFORMANCE_THRESHOLD}:", players_above_performance_threshold)
 print("Performance for each player:", performance_by_player)
+
+
+# Final Challenge - Tournament Analytics Report
+# Final report helpers
+def print_player_list(title, players):
+    print(f"\n{title}")
+    for position, player in enumerate(players, start=1):
+        if isinstance(player, dict):
+            print(f"{position}. {player['name']}")
+        else:
+            print(f"{position}. {player}")
+
+
+# Three additional analyses
+nowin_players = [player["name"] for player in cleaned_players if player["wins"] == 0]
+undefeated_players = [
+    player["name"] for player in cleaned_players
+    if player["matches"] == player["wins"]
+]
+players_by_country = {
+    country: [player["name"] for player in cleaned_players if player["country"] == country]
+    for country in unique_countries
+}
+
+team_average_scores = {}
+for team in unique_teams:
+    team_scores = [player["score"] for player in cleaned_players if player["team"] == team]
+    team_average_scores[team] = round(sum(team_scores) / len(team_scores), 2)
+
+
+# Final report
+print("\nTOURNAMENT ANALYTICS REPORT")
+print(f"Total number of players: {len(cleaned_players)}")
+print(f"Number of active players: {len(active_players)}")
+print(f"Unique teams: {', '.join(sorted(unique_teams))}")
+print(f"Unique countries: {', '.join(sorted(unique_countries))}")
+
+print_player_list("Players ranked by score", ranking_by_score)
+print_player_list("Players ranked by wins", ranking_by_wins)
+print_player_list("Top 5 players", ranking_by_score[:5])
+print_player_list(
+    f"Players above performance threshold ({TOP_PERFORMANCE_THRESHOLD})",
+    players_above_performance_threshold,
+)
+
+print("\nADDITIONAL ANALYSIS")
+print(f"Players with no wins: {', '.join(nowin_players) or 'None'}")
+print(f"Players with no losses: {', '.join(undefeated_players) or 'None'}")
+print(f"Average score by team: {team_average_scores}")
+print(f"Players by country: {players_by_country}")
+
+# Pythonic Design Review
+print("\nPYTHONIC DESIGN REVIEW")
+print("1. List comprehensions replace loops when filtering or transforming player lists.")
+print("2. Dictionary comprehensions build mappings without repetitive assignment code.")
+print("3. Set comprehensions collect unique countries and teams automatically.")
+print("4. sorted() with lambda expresses ranking criteria directly.")
+print("5. enumerate() generates leaderboard numbering without manual counters.")
+print("6. zip() and unpacking combine related collections clearly.")
+
+
+# Deliberately over-complicated comprehension:
+# complicated = [
+#     player["name"] for player in cleaned_players
+#     if player["active"] and player["score"] > 1200
+#     and player["wins"] >= 5 and player["country"] in {"Sweden", "Spain", "Germany"}
+# ]
+#
+# Clearer version: name the conditions and use a normal loop.
+selected_countries = {"Sweden", "Spain", "Germany"}
+qualified_names = []
+for player in cleaned_players:
+    is_qualified = (
+        player["active"]
+        and player["score"] > 1200
+        and player["wins"] >= 5
+        and player["country"] in selected_countries
+    )
+    if is_qualified:
+        qualified_names.append(player["name"])
+# The clearer version separates the condition from the collection-building step.
+print("Qualified names example for complicated selection:", qualified_names)
