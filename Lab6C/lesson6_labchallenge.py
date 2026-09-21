@@ -4,10 +4,42 @@
 # ==========================================================
 # Restrictions followed: no classes, file handling, external libraries, Pandas, or NumPy.
 
+# Helper functions for printing player dicts as well 
+# as dicts with different internal structure
+def format_dict_values(data, bool_labels=None):
+    """Return a single-line ' - ' joined summary of any dict's values.
+
+    Works regardless of which keys are present, in whatever order the
+    dict defines them. Boolean values are converted to a readable label
+    instead of True/False; `bool_labels` lets specific keys use custom
+    wording (e.g. {"active": ("Active", "Inactive")}), and any other
+    boolean falls back to "Yes"/"No".
+    """
+    bool_labels = bool_labels or {}
+    parts = []
+    for key, value in data.items():
+        if isinstance(value, bool):
+            active_label, inactive_label = bool_labels.get(key, ("Yes", "No"))
+            value = active_label if value else inactive_label
+        parts.append(str(value))
+    return " - ".join(parts)
+
+
+def format_dict_list(dicts, bool_labels=None):
+    """Return a multi-line string, one formatted dict per line."""
+    return "\n".join(format_dict_values(d, bool_labels) for d in dicts)
+
+def format_player(player):
+    return format_dict_values(player, bool_labels={"active": ("Active", "Inactive")})
+
+def format_player_list(players):
+    return format_dict_list(players, bool_labels={"active": ("Active", "Inactive")})
+
+
 # Part 1 - Tournament data
 # The raw data intentionally contains inconsistent whitespace/capitalization.
 raw_players = [
-    {"name": "  anna ", "team": " phoenix", "country": "Sweden", "score": 1420, "matches": 12, "wins": 8, "active": True},
+    {"name": "  anna ", "team": " phoenix", "country": "Sweden", "score": 1420, "matches": 12, "wins": 12, "active": True},
     {"name": "DAVID", "team": "Titans", "country": " sweden", "score": 1180, "matches": 10, "wins": 5, "active": True},
     {"name": " Sara", "team": "PHOENIX ", "country": "Spain", "score": 1560, "matches": 14, "wins": 10, "active": True},
     {"name": "leo ", "team": "Titans", "country": "SPAIN", "score": 990, "matches": 9, "wins": 2, "active": False},
@@ -35,11 +67,11 @@ cleaned_players = [
     }
     for player in raw_players
 ]
-# print(cleaned_players)
+print(format_player_list(cleaned_players))
 
 
 # Part 3 - Filtering the tournament
-# print("--- Part 3 ---")
+print("--- Part 3 ---")
 SCORE_THRESHOLD = 1300
 SPECIFIC_COUNTRY = "Sweden"
 
@@ -57,11 +89,16 @@ active_high_winners = [
     player for player in cleaned_players
     if player["active"] and player["wins"] >= 6
 ]
-# print("Active players:", active_players)
-# print("Players with at least 3 wins:", players_with_three_wins)
-# print("Players with a score above a threshold:", high_score_players)
-# print(f"Players from {SPECIFIC_COUNTRY}:", players_from_country)
-# print("Active players with at least 6 wins:", active_high_winners)
+print("Active players:")
+print(format_player_list(active_players))
+print("Players with at least 3 wins:")
+print(format_player_list(players_with_three_wins))
+print(f"Players with a score above a {SCORE_THRESHOLD}:")
+print(format_player_list(high_score_players))
+print(f"Players from {SPECIFIC_COUNTRY}:")
+print(format_player_list(players_from_country))
+print("Active players with at least 6 wins:")
+print(format_player_list(active_high_winners))
 
 
 # Part 4 - Tournament statistics
