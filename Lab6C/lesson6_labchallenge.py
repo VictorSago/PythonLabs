@@ -35,11 +35,11 @@ cleaned_players = [
     }
     for player in raw_players
 ]
-print(cleaned_players)
+# print(cleaned_players)
 
 
 # Part 3 - Filtering the tournament
-print("--- Part 3 ---")
+# print("--- Part 3 ---")
 SCORE_THRESHOLD = 1300
 SPECIFIC_COUNTRY = "Sweden"
 
@@ -57,15 +57,15 @@ active_high_winners = [
     player for player in cleaned_players
     if player["active"] and player["wins"] >= 6
 ]
-print("Active players:", active_players)
-print("Players with at least 3 wins:", players_with_three_wins)
-print("Players with a score above a threshold:", high_score_players)
-print(f"Players from {SPECIFIC_COUNTRY}:", players_from_country)
-print("Active players with at least 6 wins:", active_high_winners)
+# print("Active players:", active_players)
+# print("Players with at least 3 wins:", players_with_three_wins)
+# print("Players with a score above a threshold:", high_score_players)
+# print(f"Players from {SPECIFIC_COUNTRY}:", players_from_country)
+# print("Active players with at least 6 wins:", active_high_winners)
 
 
 # Part 4 - Tournament statistics
-print("--- Part 4 ---")
+# print("--- Part 4 ---")
 unique_countries = {player["country"] for player in cleaned_players}
 unique_teams = {player["team"] for player in cleaned_players}
 scores_by_player = {player["name"]: player["score"] for player in cleaned_players}
@@ -75,15 +75,15 @@ high_score_players = {
     for player in cleaned_players
     if player["score"] >= SCORE_THRESHOLD
 }
-print("Countres:", unique_countries)
-print("Teams:", unique_teams)
-print("Scores by player:", scores_by_player)
-print("Wins by player:", wins_by_player)
-print("High score players:", high_score_players)
+# print("Countries:", unique_countries)
+# print("Teams:", unique_teams)
+# print("Scores by player:", scores_by_player)
+# print("Wins by player:", wins_by_player)
+# print("High score players:", high_score_players)
 
 
 # Part 5 - Combining the tournament data
-print("--- Part 5 ---")
+# print("--- Part 5 ---")
 player_names = [player["name"] for player in cleaned_players]
 ranking_points = [1200, 950, 1430, 1100, 1275, 880, 1190, 1010, 1380, 1140, 800, 1320, 990, 910, 1400]
 bonus_points = [50, 20, 100, 30, 60, 10, 40, 25, 80, 45, 0, 70, 20, 15, 90]
@@ -103,24 +103,24 @@ short_zip_example = list(zip(["Alice", "Bob", "Carla"], [10, 20]))
 # zip() stops when the shortest input collection is exhausted.
 # Therefore, only two pairs are produced in short_zip_example.
 
-print("Ranking points by player:", ranking_points_by_player)
-print("Combined player points:", combined_player_points)
-print("Player Score Summary:", player_score_summary)
-print("Zipping unequal lists:", short_zip_example)
+# print("Ranking points by player:", ranking_points_by_player)
+# print("Combined player points:", combined_player_points)
+# print("Player Score Summary:", player_score_summary)
+# print("Zipping unequal lists:", short_zip_example)
 
 
 # Part 6 - Rankings
-print("--- Part 6 ---")
+# print("--- Part 6 ---")
 ranking_by_score = sorted(cleaned_players, key=lambda player: player["score"], reverse=True)
 ranking_by_wins = sorted(cleaned_players, key=lambda player: player["wins"], reverse=True)
 ranking_by_matches = sorted(cleaned_players, key=lambda player: player["matches"], reverse=True)
 ranking_by_name = sorted(cleaned_players, key=lambda player: player["name"])
 ranking_by_score_asc = sorted(cleaned_players, key=lambda player: player["score"])
-print("Players ranked by score, descending:", ranking_by_score)
-print("Players ranked by wins:", ranking_by_wins)
-print("Players ranked by matches:", ranking_by_matches)
-print("Players sorted by name:", ranking_by_name)
-print("Players ranked by score, ascending:", ranking_by_score_asc)
+# print("Players ranked by score, descending:", ranking_by_score)
+# print("Players ranked by wins:", ranking_by_wins)
+# print("Players ranked by matches:", ranking_by_matches)
+# print("Players sorted by name:", ranking_by_name)
+# print("Players ranked by score, ascending:", ranking_by_score_asc)
 
 
 # Part 7 - Ranked tournament report
@@ -130,7 +130,7 @@ for position, player in enumerate(ranking_by_score, start=1):
 
 
 # Part 8 - Team analysis
-print("--- Part 8 ---")
+# print("--- Part 8 ---")
 PARTICULAR_TEAM = "Phoenix"
 MANY_WINS = 4
 particular_team_players = [player["name"] for player in cleaned_players if player["team"] == PARTICULAR_TEAM]
@@ -142,17 +142,17 @@ active_players_above_threshold = {
     for player in cleaned_players                                   # Can be simplified by using `active_players` from Part 3
     if player["active"] and player["score"] >= SCORE_THRESHOLD
 }
-print(f"All players in team {PARTICULAR_TEAM}: {particular_team_players}")
-print(f"All players with more than {MANY_WINS} wins: {players_with_many_wins}")
-print("Represented teams:", unique_teams)   # From Part 4
-print("Represented countries:", unique_countries)   # From Part 4
-print(f"Active players that reached the score of {SCORE_THRESHOLD}:", active_players_above_threshold)
+# print(f"All players in team {PARTICULAR_TEAM}: {particular_team_players}")
+# print(f"All players with more than {MANY_WINS} wins: {players_with_many_wins}")
+# print("Represented teams:", unique_teams)   # From Part 4
+# print("Represented countries:", unique_countries)   # From Part 4
+# print(f"Active players that reached the score of {SCORE_THRESHOLD}:", active_players_above_threshold)
 
 
 # Part 9 - Player performance
 # Performance rewards score and wins, while also considering match efficiency.
 # The score is intentionally simple and transparent.
-print("--- Part 9 ---")
+# print("--- Part 9 ---")
 TOP_PERFORMANCE_THRESHOLD = 1800
 
 players_with_performance = [
@@ -179,10 +179,10 @@ players_above_performance_threshold = [
 performance_by_player = {
     player["name"]: player["performance"] for player in players_with_performance
 }
-print("Players ranked by performance:", performance_ranking)
-print("Top 5 performers:", top_performers)
-print(f"Players performing above {TOP_PERFORMANCE_THRESHOLD}:", players_above_performance_threshold)
-print("Performance for each player:", performance_by_player)
+# print("Players ranked by performance:", performance_ranking)
+# print("Top 5 performers:", top_performers)
+# print(f"Players performing above {TOP_PERFORMANCE_THRESHOLD}:", players_above_performance_threshold)
+# print("Performance for each player:", performance_by_player)
 
 
 # Final Challenge - Tournament Analytics Report
@@ -234,14 +234,56 @@ print(f"Players with no losses: {', '.join(undefeated_players) or 'None'}")
 print(f"Average score by team: {team_average_scores}")
 print(f"Players by country: {players_by_country}")
 
+
 # Pythonic Design Review
-print("\nPYTHONIC DESIGN REVIEW")
-print("1. List comprehensions replace loops when filtering or transforming player lists.")
-print("2. Dictionary comprehensions build mappings without repetitive assignment code.")
-print("3. Set comprehensions collect unique countries and teams automatically.")
-print("4. sorted() with lambda expresses ranking criteria directly.")
-print("5. enumerate() generates leaderboard numbering without manual counters.")
-print("6. zip() and unpacking combine related collections clearly.")
+# 
+# Example 1: cleaned_players (Part 2)
+# Longer version would have looked like:
+#   cleaned_players = []
+#   for player in raw_players:
+#       cleaned_player = dict(player)
+#       cleaned_player["name"] = player["name"].strip().title()
+#       cleaned_player["team"] = player["team"].strip().title()
+#       cleaned_player["country"] = player["country"].strip().title()
+#       cleaned_players.append(cleaned_player)
+# Technique used: list comprehension with dict unpacking.
+# Why the final version is clearer:
+#   The comprehension keeps "build a new list of transformed dictionaries"
+#   as one expression, instead of splitting it across an empty-list init,
+#   a manual copy, three assignments and an append call.
+#
+# Example 2: unique_countries (Part 4)
+# Longer version would have looked like:
+#   unique_countries = set()
+#   for player in cleaned_players:
+#       unique_countries.add(player["country"])
+# Technique used: set comprehension.
+# Why the final version is clearer:
+#   `{player["country"] for player in cleaned_players}` signals immediately
+#   that only distinct values are wanted; the init-then-add loop requires
+#   reading the whole block to notice it's a set, not a list, being built.
+#
+# Example 3: scores_by_player (Part 4)
+# Longer version would have looked like:
+#   scores_by_player = {}
+#   for player in cleaned_players:
+#       scores_by_player[player["name"]] = player["score"]
+# Technique used: dictionary comprehension.
+# Why the final version is clearer:
+#   The name -> score mapping is stated directly as key: value, rather than
+#   an empty-dict init plus a separate assignment line buried in the loop body.
+#
+# Example 4: Tournament Leaderboard (Part 7)
+# Longer version would have looked like:
+#   print("\nTOURNAMENT LEADERBOARD")
+#   position = 1
+#   for player in ranking_by_score:
+#       print(f"{position}. {player['name']} - {player['score']} points")
+#       position += 1
+# Technique used: enumerate().
+# Why the final version is clearer:
+#   enumerate(..., start=1) removes the manual counter variable that would
+#   otherwise have to be initialized and incremented with the loop by hand.
 
 
 # Deliberately over-complicated comprehension:
