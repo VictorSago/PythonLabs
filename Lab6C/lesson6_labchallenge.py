@@ -46,17 +46,17 @@ def format_dict_list(dicts, fields=None, bool_labels=None, sep=" - "):
     return f"{header}\n{rows}"
 
 
-def format_player(player, separator=" - "):
+def format_player(player, fields=None, separator=" - "):
     """Return a single-line summary of one player dict."""
     return format_dict_values(
-        player, bool_labels={"active": ("Active", "Inactive")}, sep=separator
+        player, fields=fields, bool_labels={"active": ("Active", "Inactive")}, sep=separator
     )
 
 
-def format_player_list(players, separator=" - "):
+def format_player_list(players, fields=None, separator=" - "):
     """Return a header line plus one formatted player per line."""
     return format_dict_list(
-        players, bool_labels={"active": ("Active", "Inactive")}, sep=separator
+        players, fields=fields, bool_labels={"active": ("Active", "Inactive")}, sep=separator
     )
 
 
@@ -91,11 +91,11 @@ cleaned_players = [
     }
     for player in raw_players
 ]
-print(format_player_list(cleaned_players))
+# print(format_player_list(cleaned_players))
 
 
 # Part 3 - Filtering the tournament
-print("--- Part 3 ---")
+# print("--- Part 3 ---")
 SCORE_THRESHOLD = 1300
 SPECIFIC_COUNTRY = "Sweden"
 
@@ -113,20 +113,20 @@ active_high_winners = [
     player for player in cleaned_players
     if player["active"] and player["wins"] >= 6
 ]
-print("Active players:")
-print(format_player_list(active_players))
-print("Players with at least 3 wins:")
-print(format_player_list(players_with_three_wins))
-print(f"Players with a score above a {SCORE_THRESHOLD}:")
-print(format_player_list(high_score_players))
-print(f"Players from {SPECIFIC_COUNTRY}:")
-print(format_player_list(players_from_country))
-print("Active players with at least 6 wins:")
-print(format_player_list(active_high_winners))
+# print("Active players:")
+# print(format_player_list(active_players))
+# print("Players with at least 3 wins:")
+# print(format_player_list(players_with_three_wins))
+# print(f"Players with a score above a {SCORE_THRESHOLD}:")
+# print(format_player_list(high_score_players))
+# print(f"Players from {SPECIFIC_COUNTRY}:")
+# print(format_player_list(players_from_country))
+# print("Active players with at least 6 wins:")
+# print(format_player_list(active_high_winners))
 
 
 # Part 4 - Tournament statistics
-# print("--- Part 4 ---")
+print("--- Part 4 ---")
 unique_countries = {player["country"] for player in cleaned_players}
 unique_teams = {player["team"] for player in cleaned_players}
 scores_by_player = {player["name"]: player["score"] for player in cleaned_players}
@@ -136,15 +136,15 @@ high_score_players = {
     for player in cleaned_players
     if player["score"] >= SCORE_THRESHOLD
 }
-# print("Countries:", unique_countries)
-# print("Teams:", unique_teams)
-# print("Scores by player:", scores_by_player)
-# print("Wins by player:", wins_by_player)
-# print("High score players:", high_score_players)
+print("Countries:", unique_countries)
+print("Teams:", unique_teams)
+print("Scores by player:", scores_by_player)
+print("Wins by player:", wins_by_player)
+print("High score players:", high_score_players)
 
 
 # Part 5 - Combining the tournament data
-# print("--- Part 5 ---")
+print("--- Part 5 ---")
 player_names = [player["name"] for player in cleaned_players]
 ranking_points = [1200, 950, 1430, 1100, 1275, 880, 1190, 1010, 1380, 1140, 800, 1320, 990, 910, 1400]
 bonus_points = [50, 20, 100, 30, 60, 10, 40, 25, 80, 45, 0, 70, 20, 15, 90]
@@ -166,7 +166,8 @@ short_zip_example = list(zip(["Alice", "Bob", "Carla"], [10, 20]))
 
 # print("Ranking points by player:", ranking_points_by_player)
 # print("Combined player points:", combined_player_points)
-# print("Player Score Summary:", player_score_summary)
+print("Player Score Summary:")
+print(format_dict_list(player_score_summary))
 # print("Zipping unequal lists:", short_zip_example)
 
 
@@ -177,17 +178,22 @@ ranking_by_wins = sorted(cleaned_players, key=lambda player: player["wins"], rev
 ranking_by_matches = sorted(cleaned_players, key=lambda player: player["matches"], reverse=True)
 ranking_by_name = sorted(cleaned_players, key=lambda player: player["name"])
 ranking_by_score_asc = sorted(cleaned_players, key=lambda player: player["score"])
-# print("Players ranked by score, descending:", ranking_by_score)
-# print("Players ranked by wins:", ranking_by_wins)
-# print("Players ranked by matches:", ranking_by_matches)
-# print("Players sorted by name:", ranking_by_name)
-# print("Players ranked by score, ascending:", ranking_by_score_asc)
+# print("Players ranked by score, descending:")
+# print(format_player_list(ranking_by_score))
+# print("Players ranked by wins:")
+# print(format_player_list(ranking_by_wins))
+# print("Players ranked by matches:")
+# print(format_player_list(ranking_by_matches))
+# print("Players sorted by name:")
+# print(format_player_list(ranking_by_name))
+# print("Players ranked by score, ascending:")
+# print(format_player_list(ranking_by_score_asc))
 
 
 # Part 7 - Ranked tournament report
 print("\nTOURNAMENT LEADERBOARD")
 for position, player in enumerate(ranking_by_score, start=1):
-    print(f"{position}. {player['name']} - {player['score']} points")
+    print(f"{position}. {format_player(player, fields=['name', 'score'])} points")
 
 
 # Part 8 - Team analysis
@@ -248,11 +254,11 @@ performance_by_player = {
 
 # Final Challenge - Tournament Analytics Report
 # Final report helpers
-def print_player_list(title, players):
+def print_player_list(title, players, fields=None):
     print(f"\n{title}")
     for position, player in enumerate(players, start=1):
         if isinstance(player, dict):
-            print(f"{position}. {player['name']}")
+            print(f"{position}. {format_player(player, fields=fields)}")
         else:
             print(f"{position}. {player}")
 
@@ -281,12 +287,13 @@ print(f"Number of active players: {len(active_players)}")
 print(f"Unique teams: {', '.join(sorted(unique_teams))}")
 print(f"Unique countries: {', '.join(sorted(unique_countries))}")
 
-print_player_list("Players ranked by score", ranking_by_score)
-print_player_list("Players ranked by wins", ranking_by_wins)
-print_player_list("Top 5 players", ranking_by_score[:5])
+print_player_list("Players ranked by score", ranking_by_score, fields=["name", "score"])
+print_player_list("Players ranked by wins", ranking_by_wins, fields=["name", "wins"])
+print_player_list("Top 5 players", ranking_by_score[:5], fields=["name", "score"])
 print_player_list(
     f"Players above performance threshold ({TOP_PERFORMANCE_THRESHOLD})",
     players_above_performance_threshold,
+    fields=["name", "performance"]
 )
 
 print("\nADDITIONAL ANALYSIS")
