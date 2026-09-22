@@ -13,6 +13,8 @@ products = [
     {"name": "Notebook", "price": 6.50, "category": "Stationery"},
     {"name": "Fountain Pen", "price": 18.25, "category": "Stationery"},
     {"name": "Backpack", "price": 59.99, "category": "Accessories"},
+    {"name": "Laptop", "price": 750.00, "category": "Electronics"},
+    {"name": "Desk", "price": 150.00, "category": "Home"}
 ]
 
 customers = [
@@ -21,6 +23,7 @@ customers = [
     {"name": "Sara Nilsson", "email": "sara.nilsson@example.com", "customer_id": "C003"},
     {"name": "Leo Martins", "email": "leo.martins@example.com", "customer_id": "C004"},
     {"name": "Mia Fischer", "email": "mia.fischer@example.com", "customer_id": "C005"},
+    {"name": "Arthur Dent", "email": "arthur.dent@example.com", "customer_id": "C006"}
 ]
 
 # --- Part 2 - Create orders ---
@@ -90,3 +93,135 @@ def print_order(order):
 
 for order in orders:
     print_order(order)
+
+
+# --- Part 3 - Variable number of products ---
+def calculate_subtotal(*prices):
+    """Calculate the subtotal for a variable number of product prices.
+
+    Works the same way whether called with one price, several, or none
+    at all (an empty call simply returns 0).
+    """
+    return sum(prices)
+
+
+# --- Alternative - calculate_subtotal without sum() ---
+def calculate_subtotal_the_hard_way(*prices):
+    """Same result as calculate_subtotal(), but built with a manual loop
+    instead of sum() - kept only to show what the "hard way" looks like.
+    """
+    total = 0
+    for price in prices:
+        total += price
+    return total
+
+
+single_price_subtotal = calculate_subtotal(199)
+multiple_prices_subtotal = calculate_subtotal(199, 349, 99, 129)
+no_prices_subtotal = calculate_subtotal()
+print("Subtotal for one price:", single_price_subtotal)
+print("Subtotal for several prices:", multiple_prices_subtotal)
+print("Subtotal with no prices supplied:", no_prices_subtotal)
+
+
+# --- Part 4 - Order configuration ---
+def configure_order_settings(**settings):
+    """Process a set of optional order settings, supplied as keyword
+    arguments, and return them as a dict.
+    """
+    return {key: value for key, value in settings.items() if value is not None}
+
+
+# settings_1 = configure_order_settings(shipping="express", priority=True, discount=10)
+# settings_2 = configure_order_settings(shipping="standard", gift_message="Happy birthday!")
+# settings_3 = configure_order_settings(shipping="standard", discount=None, priority=False)
+# print(settings_1)
+# print(settings_2)
+# print(settings_3)
+
+
+# --- Part 5 - Unpacking existing data ---
+
+# Positional unpacking (*) - existing lists/tuples used as positional args
+
+# Example A: a tuple of prices, already collected elsewhere, unpacked
+# straight into calculate_subtotal() instead of retyped one by one.
+weekend_sale_prices = (199, 349, 99, 129)
+weekend_sale_subtotal = calculate_subtotal(*weekend_sale_prices)
+
+# Example B: a list of products, already selected elsewhere, unpacked
+# into create_order()'s *order_products.
+selected_products = [products[0], products[2], products[5]]
+order_6 = create_order("ORD-1006", customers[0], *selected_products, shipping="standard")
+orders.append(order_6)
+
+print("Weekend sale subtotal:", weekend_sale_subtotal)
+print_order(order_6)
+
+
+# Dictionary unpacking (**) - existing dicts used as keyword arguments
+
+# Example A: this dict contains everything configure_order_settings() needs.
+autumn_campaign_settings = {
+    "shipping": "standard",
+    "discount": 15,
+    "gift_message": "Thanks for shopping with us!",
+}
+autumn_settings = configure_order_settings(**autumn_campaign_settings)
+
+# Example B: an existing options dict unpacked directly into
+# create_order()'s **order_options, alongside its positional arguments.
+express_options = {"shipping": "express", "priority": True}
+order_7 = create_order("ORD-1007", customers[3], products[1], **express_options)
+orders.append(order_7)
+
+print("Autumn campaign settings:", autumn_settings)
+print_order(order_7)
+
+
+# --- Part 6 - Flexible order summary ---
+def order_summary(order_id, customer, *notes, **metadata):
+    """Build a readable, multi-line order summary.
+
+    order_id and customer are required; *notes accepts any number of messages
+    or notes (including none at all), and **metadata accepts whatever extra
+    information is relevant for a given order.
+    """
+    lines = [f"Order {order_id}", f"Customer: {customer}"]
+
+    if notes:
+        lines.append("Notes:")
+        for note in notes:
+            lines.append(f"  - {note}")
+
+    if metadata:
+        lines.append("Metadata:")
+        for key, value in metadata.items():
+            lines.append(f"  {key}: {value}")
+
+    return "\n".join(lines)
+
+
+summary_1 = order_summary(
+    "ORD-1042",
+    "Anna Andersson",
+    "Express delivery",
+    "Leave at reception",
+    priority=True,
+    campaign="SUMMER26",
+)
+
+# With a different number of notes and metadata fields
+summary_2 = order_summary(
+    "ORD-1003",
+    customers[2]["name"],
+    "Gift wrap requested",
+    discount=10,
+)
+
+# No notes and no metadata at all - still a valid, readable summary.
+summary_3 = order_summary("ORD-1001", customers[0]["name"])
+
+print(summary_1)
+print(summary_2)
+print(summary_3)
