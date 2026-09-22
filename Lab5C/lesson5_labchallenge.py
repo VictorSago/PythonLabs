@@ -222,6 +222,70 @@ summary_2 = order_summary(
 # No notes and no metadata at all - still a valid, readable summary.
 summary_3 = order_summary("ORD-1001", customers[0]["name"])
 
-print(summary_1)
-print(summary_2)
-print(summary_3)
+# print(summary_1)
+# print(summary_2)
+# print(summary_3)
+
+
+# --- Part 7 - Scope and order statistics ---
+STORE_NAME = "PixelMart"
+TAX_RATE = 0.25
+total_orders_processed = 0
+
+# Reading a global variable from inside a function - this never needs
+# the `global` keyword, only reassigning a global does.
+def store_welcome_message():
+    return f"Welcome to {STORE_NAME}!"
+
+
+# Creating a local variable with the same name as a global - this
+# shadows the global inside this function only, and does not modify it.
+def preview_store_name(candidate_name):
+    STORE_NAME = candidate_name
+    return f"Preview: {STORE_NAME}"
+
+
+print(store_welcome_message())
+print(preview_store_name("Test Store"))
+print("Global STORE_NAME is still:", STORE_NAME)
+
+
+# Attempting to assign to a global numeric variable inside a function, without
+# the `global` keyword. Because it assigns to total_orders_processed, Python
+# treats it as a local variable for the *entire* function body - so reading it
+# on the right-hand side, before any local assignment has actually happened,
+# raises an UnboundLocalError rather than reading the global.
+def broken_increment_orders_processed():
+    total_orders_processed += 1
+    return total_orders_processed
+
+
+# This will break the script
+# broken_increment_orders_processed()
+
+
+# The preferred design: instead of using `global` to mutate the global counter,
+# the function takes the current count as an argument and returns the new value.
+# The caller updates the global variable explicitly. This keeps the function
+# pure and independently testable, and makes the fact that the global variable
+# changes visible at the call, rather than hidden inside the function.
+def increment_orders_processed(current_count):
+    return current_count + 1
+
+
+total_orders_processed = increment_orders_processed(total_orders_processed)
+total_orders_processed = increment_orders_processed(total_orders_processed)
+print("Total orders processed:", total_orders_processed)
+
+# Enclosing scope: a nested function can read a variable from its enclosing
+# function's scope directly, without it being passed in as an argument.
+def outer_func():
+    order_id = "ORD-2001"
+
+    def inner_func():
+        print(f"Processing order: {order_id}")
+
+    inner_func()
+
+
+outer_func()
