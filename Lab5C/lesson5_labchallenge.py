@@ -289,3 +289,86 @@ def outer_func():
 
 
 outer_func()
+
+
+# --- Part 8 - Order processing ---
+SHIPPING_COSTS = {"standard": 4.99, "express": 12.99}
+
+
+def process_order(order_id, customer, *order_products, **order_settings):
+    """Process an order and return its subtotal, discount, shipping cost,
+    tax and final total.
+
+    order_id and customer are always required and single-valued, so they are
+    normal named parameters. The products in an order can be any number, so
+    they are collected with *order_products. Which settings apply differs from
+    order to order and none of them are required, so they are collected with
+    **order_settings instead of being listed. Using *args or **kwargs for
+    order_id/customer, on the other hand, would only make the function harder
+    to call correctly for no real benefit.
+    """
+    subtotal = calculate_subtotal(*(product["price"] for product in order_products))
+
+    discount_percentage = order_settings.get("discount", 0)
+    discount_amount = subtotal * discount_percentage / 100
+
+    shipping_method = order_settings.get("shipping", "standard")
+    shipping_cost = SHIPPING_COSTS.get(shipping_method, SHIPPING_COSTS["standard"])
+
+    taxable_amount = subtotal - discount_amount
+    tax_amount = taxable_amount * TAX_RATE
+
+    final_total = taxable_amount + shipping_cost + tax_amount
+
+    return {
+        "order_id": order_id,
+        "customer": customer,
+        "subtotal": round(subtotal, 2),
+        "discount": round(discount_amount, 2),
+        "shipping_cost": shipping_cost,
+        "tax": round(tax_amount, 2),
+        "final_total": round(final_total, 2)
+    }
+
+
+# A helper for printing processed orders
+# A processed order is flat - customer is already a plain string and there's
+# no nested product list, so print_order() doesn't apply here, and neither does
+# order_summary(). This is a small, separate printer for the flatter shape.
+def print_processed_order(processed_order):
+    print(f"Order {processed_order['order_id']}")
+    print(f"  Customer: {processed_order['customer']}")
+    for key, value in processed_order.items():
+        if key in ("order_id", "customer"):
+            continue
+        if isinstance(value, float):
+            print(f"  {key}: {value:.2f} €")
+        else:
+            print(f"  {key}: {value}")
+    print()
+
+
+# --- Part 9 - Different order types ---
+# The orders already created in Parts 2 and 5 already cover every
+# required category below, so no new orders need to be invented just
+# for this part:
+#   - one product:            order_1, order_4, order_7
+#   - several products:       order_2, order_3, order_6
+#   - no discount:             order_1, order_2, order_4, order_6, order_7
+#   - with a discount:         order_3, order_5
+#   - express order:           order_2, order_7
+#   - additional metadata:     order_4 (gift_message, delivery_instructions),
+#                               order_5 (campaign_code)
+processed_orders = []
+
+for order in orders:
+    order_options = {
+        key: value for key, value in order.items()
+        if key not in ("order_id", "customer", "products")
+    }
+    processed_order = process_order(
+        order["order_id"], order["customer"]["name"], *order["products"], **order_options
+    )
+    processed_orders.append(processed_order)
+    print_processed_order(processed_order)
+
