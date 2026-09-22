@@ -372,3 +372,135 @@ for order in orders:
     processed_orders.append(processed_order)
     print_processed_order(processed_order)
 
+
+# --- Final Challenge - Daily Order Report ---
+def create_report(title, *sections, **metadata):
+    """Build a structured report.
+
+    title is required; *sections accepts any number of report sections, each
+    expected as a (heading, content_lines) pair, and **metadata accepts
+    optional extra information without needing to be declared ahead of time.
+    Returns a structured dict rather than printed text.
+    """
+    return {
+        "title": title,
+        "sections": list(sections),
+        "metadata": metadata
+    }
+
+
+def report_to_string(report):
+    """Convert a structured report into a readable multi-line string."""
+    lines = [report["title"], "=" * len(report["title"])]
+
+    for heading, content_lines in report["sections"]:
+        lines.append("")
+        lines.append(heading)
+        lines.append("-" * len(heading))
+        lines.extend(content_lines)
+
+    if report["metadata"]:
+        lines.append("")
+        lines.append("Metadata")
+        lines.append("-" * len("Metadata"))
+        for key, value in report["metadata"].items():
+            lines.append(f"{key}: {value}")
+
+    return "\n".join(lines)
+
+
+# Required statistics
+number_of_orders = len(processed_orders)
+total_revenue = round(sum(order["final_total"] for order in processed_orders), 2)
+average_order_value = round(total_revenue / number_of_orders, 2)
+# Finding max without using the built-in was demonstrated in previous labs
+largest_order = max(processed_orders, key=lambda order: order["final_total"])
+smallest_order = min(processed_orders, key=lambda order: order["final_total"])
+
+# Two additional statistics
+total_discount_given = round(sum(order["discount"] for order in processed_orders), 2)
+total_tax_collected = round(sum(order["tax"] for order in processed_orders), 2)
+
+summary_section = (
+    "Summary",
+    [
+        f"Number of orders: {number_of_orders}",
+        f"Total revenue: {total_revenue:.2f} €",
+        f"Average order value: {average_order_value:.2f} €",
+        f"Total discount given: {total_discount_given:.2f} €",
+        f"Total tax collected: {total_tax_collected:.2f} €",
+    ]
+)
+
+largest_smallest_section = (
+    "Largest & smallest orders",
+    [
+        f"Largest: {largest_order['order_id']} ({largest_order['customer']}) - "
+        f"{largest_order['final_total']:.2f} €",
+        f"Smallest: {smallest_order['order_id']} ({smallest_order['customer']}) - "
+        f"{smallest_order['final_total']:.2f} €",
+    ]
+)
+
+daily_report = create_report(
+    "Daily Order Report",
+    summary_section,
+    largest_smallest_section,
+    generated_by="Order Management System",
+    department="Sales",
+    date="2026-09-18",
+    version="1.0",
+)
+
+print(report_to_string(daily_report))
+
+
+# --- Design Challenge ---
+#
+# Example 1: create_order(order_id, customer, *order_products, **order_options)
+# Why: order_id and customer are always required and always exactly one value
+#   each, so they are normal named parameters. The number of products in an
+#   order varies, so they are collected in *order_products. Which settings
+#   apply differs per order, so those are collected with **order_options.
+# Alternative considered: requiring products as an explicit list parameter,
+#   e.g. create_order(order_id, customer, products_list, **order_options).
+# Why the final version is clearer: the caller can list products directly at
+#   the call site instead of having to build a list first.
+#
+# Example 2: calculate_subtotal(*prices)
+# Why: the function needs to work with any number of prices, including zero, 
+#   without needing a different function per product count.
+# Alternative considered: a single prices parameter expecting a list or
+#   tuple, e.g. calculate_subtotal(prices_list).
+# Why the final version is clearer: calling it with a handful of prices reads
+#   naturally, instead of forcing the caller to wrap them in a list or tuple
+#   first, even for a single price. With a list-based design, calling 
+#   calculate_subtotal(199) instead of calculate_subtotal([199]) would
+#   immediately fail with TypeError: 'int' object is not iterable, since sum()
+#   cannot work with a bare number - the caller would have to remember, for
+#   every call, that even a single price needs wrapping. *prices accepts both
+#   a single value and several without the caller needing to think about it.
+#
+# Example 3: configure_order_settings(**settings)
+# Why: the set of possible settings is open-ended and varies between orders.
+# Alternative considered: declaring every known setting as its own optional 
+#   parameter, e.g. configure_order_settings(shipping=None, discount=None,
+#   priority=None, gift_message=None, ...).
+# Why the final version is clearer: a fixed list of optional parameters forces
+#   the function's own signature to grow every time a new kind of setting is
+#   needed, and it gets long and hard to scan. **kwargs supports a brand-new
+#   setting - say, a future "insurance" option - the moment a caller starts
+#   passing it, with zero changes to configure_order_settings itself, whereas
+#   the explicit-parameter version would require editing the function's
+#   definition just to accept one more option.
+#
+# Where *args/**kwargs would make things LESS clear:
+# process_order(order_id, customer, *order_products, **order_settings)
+#   deliberately keeps order_id and customer as normal parameters rather than
+#   folding them into **order_settings alongside the optional settings. If
+#   they were just two more keys in a general kwargs dict, Python would no
+#   longer enforce that they're actually supplied - forgetting order_id would
+#   fail with a KeyError, instead of an immediate, clear "missing required
+#   argument" error at the call site. Keeping them explicit also makes it
+#   obvious, just from the function signature, which two pieces of information
+#   every call actually requires versus what's merely optional.
