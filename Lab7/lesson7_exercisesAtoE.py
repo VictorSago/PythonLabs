@@ -95,6 +95,7 @@ print_object(laptop7)
 
 # --- Part B - Methods and state
 # ------------------------------
+print("--- Part B ---")
 
 # 1. Extend your Book class with an is_long() method
 # See Part A, Ex1
@@ -169,6 +170,7 @@ print(task3.completed)  # False
 
 # --- Part C - Instance and class attributes
 # ------------------------------------------
+print("--- Part C ---")
 
 # 1. Create a Product class with name and price as instance attributes.
 # 2. Add a class attribute tax_rate shared by all Product objects.
@@ -216,3 +218,106 @@ print("\nPrices after giving product1 its own tax rate:")
 
 for product in [product1, product2, product3]:
     print(product.name, round(product.price_with_tax(), 2))
+
+
+# --- Part D - Collections of objects
+# -----------------------------------
+print("--- Part D ---")
+
+# 1. Create at least six Student objects with name and score.
+# 2. Store all Student objects in a list.
+# 4. Add a get_status() method that returns "PASS" or "FAIL" based on the score.
+class Student:
+    def __init__(self, name, score):
+        self.name = name
+        self.score = score
+
+    def get_status(self):
+        if self.score >= 70:
+            return "PASS"
+        else:
+            return "FAIL"
+
+
+students = [
+    Student("Alice", 85),
+    Student("Bob", 62),
+    Student("Chloe", 91),
+    Student("Daniel", 74),
+    Student("Eva", 55),
+    Student("Frank", 68)
+]
+
+
+# 3. Loop through the list and print each student's name and score.
+print("Student scores:")
+for student in students:
+    print(student.name, student.score)
+
+
+# 5. Loop through the students again and print each student's name and status.
+print("\nStudent statuses:")
+for student in students:
+    print(student.name, student.get_status())
+
+
+# 6. Use a list comprehension to create a new list containing only students with a score of 70 or higher.
+passing_students = [
+    student for student in students
+    if student.score >= 70
+]
+print("\nStudents with scores of 70 or higher:")
+for student in passing_students:
+    print(student.name, student.score)
+
+
+
+# --- Part E - Objects inside objects
+# -----------------------------------
+print("--- Part E ---")
+
+# 1. Create a Teacher class with a name.
+class Teacher:
+    def __init__(self, name):
+        self.name = name
+
+
+# 2. Create a Course class with a course name and a teacher.
+# 5. Extend Course so that it also contains an initially empty list of Student objects.
+class Course:
+    def __init__(self, name, teacher):
+        if not isinstance(teacher, Teacher):
+            raise ValueError("teacher must be a Teacher object")
+
+        self.name = name
+        self.teacher = teacher
+
+        # This is a new, separate list for every Course object.
+        self.students = []
+
+    def add_student(self, student):
+        if not isinstance(student, Student):
+            raise ValueError("Only Student objects can be added")
+
+        self.students.append(student)
+
+
+# 3. Create a Teacher object and use it when creating a Course object.
+teacher1 = Teacher("Prof. Timothy Snyder")
+course1 = Course("History of Eastern Europe", teacher1)
+
+
+# 4. Print the course name and the teacher's name through the Course object.
+print(course1.name)
+print(course1.teacher.name)
+
+
+# 6. Add an add_student() method and use it to add at least three Student objects to the course.
+for student in students:
+    course1.add_student(student)
+
+
+# 7. Loop through course.students and print the name of every student.
+print(f"Students attending course {course1.name}:")
+for student in course1.students:
+    print(student.name)
