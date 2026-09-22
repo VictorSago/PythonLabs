@@ -94,7 +94,7 @@ print_object(laptop7)
 
 
 # --- Part B - Methods and state
-# --------------------------------
+# ------------------------------
 
 # 1. Extend your Book class with an is_long() method
 # See Part A, Ex1
@@ -165,3 +165,54 @@ task2.complete()
 
 print(task2.completed)  # True
 print(task3.completed)  # False
+
+
+# --- Part C - Instance and class attributes
+# ------------------------------------------
+
+# 1. Create a Product class with name and price as instance attributes.
+# 2. Add a class attribute tax_rate shared by all Product objects.
+# 3. Add a price_with_tax() method that returns the price including tax.
+class Product:
+    # Class attribute shared by all Product objects
+    tax_rate = 0.20
+    def __init__(self, name, price):
+        # Instance attributes
+        self.name = name
+        self.price = price
+
+    def price_with_tax(self):
+        return self.price * (1 + self.tax_rate)
+
+
+# 4. Create at least three Product objects and print their prices with tax.
+product1 = Product("Keyboard", 50)
+product2 = Product("Mouse", 25)
+product3 = Product("Monitor", 200)
+
+for product in [product1, product2, product3]:
+    print(product.name, round(product.price_with_tax(), 2))
+
+
+# 5. Change Product.tax_rate and show how it affects the Product objects.
+Product.tax_rate = 0.25
+
+print("\nAfter changing Product.tax_rate:")
+
+for product in [product1, product2, product3]:
+    print(product.name, round(product.price_with_tax(), 2))
+
+
+# 6. Give one Product object its own tax_rate. Print the tax rate from that
+# object, another Product object and the Product class.
+product1.tax_rate = 0.10
+
+print("\nTax rates:")
+print("product1:", round(product1.tax_rate, 2))
+print("product2:", round(product2.tax_rate, 2))
+print("Product class:", round(Product.tax_rate, 2))
+
+print("\nPrices after giving product1 its own tax rate:")
+
+for product in [product1, product2, product3]:
+    print(product.name, round(product.price_with_tax(), 2))
