@@ -288,17 +288,14 @@ class Course:
     def __init__(self, name, teacher):
         if not isinstance(teacher, Teacher):
             raise ValueError("teacher must be a Teacher object")
-
         self.name = name
         self.teacher = teacher
-
         # This is a new, separate list for every Course object.
         self.students = []
 
     def add_student(self, student):
         if not isinstance(student, Student):
             raise ValueError("Only Student objects can be added")
-
         self.students.append(student)
 
 

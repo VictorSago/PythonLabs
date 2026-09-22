@@ -1,6 +1,6 @@
 
 # ==========================================================
-# PART G - Stretch challenges
+# Part G - Stretch challenges
 # ==========================================================
 
 # 1. Flatten a simple list of lists using a comprehension.

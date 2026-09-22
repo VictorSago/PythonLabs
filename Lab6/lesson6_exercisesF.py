@@ -1,7 +1,7 @@
 
-# ============================================================
-# PART F - Applied challenge: Data cleanup
-# ============================================================
+# ==========================================================
+# Part F - Applied challenge: Data cleanup
+# ==========================================================
 
 # 1. At least twelve messy dictionaries representing products:
 # inconsistent name casing/spacing, category, price and stock.
