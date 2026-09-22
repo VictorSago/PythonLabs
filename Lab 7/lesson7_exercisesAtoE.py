@@ -1,9 +1,10 @@
 
 # ==========================================================
-# Part A - Classes and objects
+# Lab 7
 # ==========================================================
 
 # Helper functions to examine objects
+# vars(obj) returns a dictionary of the object's attributes.
 def get_attributes(obj):
     return vars(obj).copy()
 
@@ -17,6 +18,9 @@ def print_object(obj):
         print(f'  "{name}": {repr(value)}')
 
 
+# --- Part A - Classes and objects
+# --------------------------------
+
 # 1. Create a Book class with title, author and pages. 
 # Create at least four Book objects and print their attributes.
 
@@ -25,19 +29,17 @@ class Book:
         self.title = title
         self.author = author
         self.pages = pages
+    
+    def is_long(self):
+        return self.pages > 300
 
-book1 = Book("The Hitchhiker's Guide to the Galaxy", "Douglas Adams", 200)
+
+book1 = Book("The Hitchhiker's Guide to the Galaxy", "Douglas Adams", 190)
 book2 = Book("1984", "George Orwell", 320)
 book3 = Book("Solaris", "Stanislaw Lem", 200)
-book4 = Book("The Left Hand of Darkness", "Ursula K. Le Guin", 300)
+book4 = Book("The Left Hand of Darkness", "Ursula K. Le Guin", 350)
 
 books = [book1, book2, book3, book4]
-
-# for book in books:
-#     print("Title:", book.title)
-#     print("Author", book.author)
-#     print("Number of pages:", book.pages)
-#     print()
 
 for book in books:
     print_object(book)
@@ -65,10 +67,6 @@ for laptop in laptops:
     print_object(laptop)
     print()
 
-# print(laptop1)
-# print(laptop2)
-# print(laptop3)
-
 
 # 3. Create two objects with the same attribute values
 laptop4 = Laptop("HP", "Pavilion", 8, 700)
@@ -76,6 +74,7 @@ laptop5 = Laptop("HP", "Pavilion", 8, 700)
 
 # `is` checks whether they are the exact same object in memory
 print(laptop4 is laptop5)  # False
+
 
 # 4. Add a default value to at least one __init__ parameter.
 laptop6 = Laptop("Acer", "Aspire", 8)
@@ -92,3 +91,77 @@ laptop7 = Laptop(
 )
 laptops.append(laptop7)
 print_object(laptop7)
+
+
+# --- Part B - Methods and state
+# --------------------------------
+
+# 1. Extend your Book class with an is_long() method
+# See Part A, Ex1
+print("Book1 is long:", book1.is_long())  # False
+print("Book2 is long:", book2.is_long())  # True
+
+
+# 2. Create a BankAccount class with owner and balance. Add a deposit() method
+# that changes the balance.
+# 3. Add a withdraw() method. Prevent withdrawals that would make the balance
+# negative by raising a ValueError.
+class BankAccount:
+    def __init__(self, owner, balance=0):
+        self.owner = owner
+        self.balance = balance
+
+    def deposit(self, amount):
+        self.balance += amount
+
+    def withdraw(self, amount):
+        if amount > self.balance:
+            raise ValueError("Withdrawal would make the balance negative")
+        self.balance -= amount
+
+
+account = BankAccount("Ada", 100)
+
+account.deposit(50)
+print("Account 1 balance:", account.balance)  # 150
+
+account.withdraw(75)
+print("Account 1 balance:", account.balance)  # 75
+
+# This will raise a ValueError exception
+# account.withdraw(100)
+
+
+# 4. Create a Task class with title and completed=False. 
+# Add complete() and reopen() methods.
+class Task:
+    def __init__(self, title, completed=False):
+        self.title = title
+        self.completed = completed
+
+    def complete(self):
+        self.completed = True
+
+    def reopen(self):
+        self.completed = False
+
+task1 = Task("Complete the Python labs")
+
+print(task1.completed)  # False
+
+task1.complete()
+print(task1.completed)  # True
+
+task1.reopen()
+print(task1.completed)  # False
+
+
+# 5. Create at least two objects from one of your classes and show that
+# changing the state of one object does not change the other.
+task2 = Task("Write the report")
+task3 = Task("Review the report")
+
+task2.complete()
+
+print(task2.completed)  # True
+print(task3.completed)  # False
