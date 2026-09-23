@@ -44,8 +44,7 @@ for word in words:
 
 print("Words longer than 5 characters:", long_word_count)
 
-# 6. Given a list of scores, count passes and failures using a
-# threshold of 70.
+# 6. Given a list of scores, count passes and failures using a threshold of 70.
 scores = [55, 72, 90, 68, 70, 45, 88, 32]
 
 passes = 0
@@ -59,8 +58,7 @@ for score in scores:
 print("Passes:", passes)
 print("Failures:", failures)
 
-# 7. Loop over a dictionary using keys, values and .items() in three
-# separate examples.
+# 7. Loop over a dictionary using keys, values and .items() in three separate examples.
 student_grades = {"Alice": "A", "Bob": "B", "Carla": "C"}
 
 # Using keys

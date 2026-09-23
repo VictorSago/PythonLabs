@@ -135,7 +135,66 @@ print(savings_2.owner, "-", savings_2.balance, "-", savings_2.interest_rate)
 # 5. Write the "is-a" statement that explains why this inheritance relationship makes sense.
 #
 # A SavingsAccount IS AN Account: it has everything a regular Account has
-# (an owner and a balance) plus its own interest_rate on top. Inheriting from
-# Account means that shared owner/balance behaviour only needs to be written
-# once, in Account, rather than duplicated inside SavingsAccount.
-print(isinstance(savings_1, Account))
+# (an owner and a balance) plus its own interest_rate on top. The isinstance()
+# checks below confirm it - every SavingsAccount object is also considered an
+# Account. The reverse doesn't hold: a plain Account has no interest_rate, so 
+# it is not a SavingsAccount. Inheriting from Account means that shared
+# owner/balance behaviour only needs to be written once, in Account, rather
+# than duplicated inside SavingsAccount.
+print("savings_1 is an Account:", isinstance(savings_1, Account))
+print("savings_1 is a SavingsAccount:", isinstance(savings_1, SavingsAccount))
+print("account_1 is a SavingsAccount:", isinstance(account_1, SavingsAccount))
+
+
+# ==========================================================
+# Part D - Inherited and subclass-specific behaviour
+# ==========================================================
+
+# 1. Create a base class Employee with name and a method get_information().
+class Employee:
+    def __init__(self, name):
+        self.name = name
+
+    def get_information(self):
+        emp_cls = type(self).__name__
+        type_string = f" of {emp_cls} class" if emp_cls != "Employee" else ""
+        return f"{self.name} is an employee{type_string}."
+
+
+# 2. Create Developer(Employee) and add a method that only Developer has.
+class Developer(Employee):
+    def write_code(self):
+        return f"{self.name} is writing code."
+
+
+# 3. Create another Employee subclass of your choice and give it its own subclass-specific method.
+class Designer(Employee):
+    def design_mockup(self):
+        return f"{self.name} is designing a mockup."
+
+
+# 4. Demonstrate that both subclasses can use inherited behaviour from Employee.
+developer_1 = Developer("Alice")
+designer_1 = Designer("Bob")
+print(developer_1.get_information())
+print(designer_1.get_information())
+
+# Subclass-specific behaviour, for context.
+print(developer_1.write_code())
+print(designer_1.design_mockup())
+
+
+# 5. Demonstrate that an Employee object cannot automatically use a method
+# that only exists in one of its subclasses.
+employee_1 = Employee("Charlie")
+print(employee_1.get_information())
+
+try:
+    employee_1.write_code()
+except AttributeError as error:
+    print(f"employee_1.write_code() failed as expected: {error}")
+
+# Inheritance only flows one way: a subclass gets everything the base class
+# defines, but the base class knows nothing about what its subclasses later
+# add. write_code() only exists on Developer, so a plain Employee object
+# has no such method at all.
