@@ -101,3 +101,41 @@ for movie in (movie_1, movie_2):
 #   an attribute name (movie.rtaing) fails immediately and clearly, whereas a
 #   typo in a dict key (movie_dict["rtaing"]) only surfaces as a KeyError
 #   wherever that key happens to get used.
+
+
+# ==========================================================
+# Part C - Inheritance fundamentals
+# ==========================================================
+
+# 1. Create a base class Account with owner and balance.
+class Account:
+    def __init__(self, owner, balance):
+        self.owner = owner
+        self.balance = balance
+
+
+# 2. Create SavingsAccount(Account) with an additional interest_rate attribute.
+# 3. Use super() so SavingsAccount reuses the initialization from Account.
+class SavingsAccount(Account):
+    def __init__(self, owner, balance, interest_rate):
+        super().__init__(owner, balance)
+        self.interest_rate = interest_rate
+
+
+# 4. Create at least two objects and print their attributes.
+account_1 = Account("Anna Andersson", 500)
+savings_1 = SavingsAccount("David Kim", 1000, 0.03)
+savings_2 = SavingsAccount("Sara Nilsson", 2500, 0.025)
+
+print(account_1.owner, "-", account_1.balance)
+print(savings_1.owner, "-", savings_1.balance, "-", savings_1.interest_rate)
+print(savings_2.owner, "-", savings_2.balance, "-", savings_2.interest_rate)
+
+
+# 5. Write the "is-a" statement that explains why this inheritance relationship makes sense.
+#
+# A SavingsAccount IS AN Account: it has everything a regular Account has
+# (an owner and a balance) plus its own interest_rate on top. Inheriting from
+# Account means that shared owner/balance behaviour only needs to be written
+# once, in Account, rather than duplicated inside SavingsAccount.
+print(isinstance(savings_1, Account))
