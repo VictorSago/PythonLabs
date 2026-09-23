@@ -244,3 +244,47 @@ try:
     Laptop("Broken", -5, 8)
 except ValueError as error:
     print(f"Laptop('Broken', -5, 8) failed as expected: {error}")
+
+
+# ==========================================================
+# Part F - Method overriding
+# ==========================================================
+
+# 1. Create a base class Notification with a method send() that
+# returns a general message.
+class Notification:
+    def send(self):
+        return "Sending a general notification."
+
+
+# 2. Create EmailNotification(Notification) and SMSNotification(Notification).
+# 3. Override send() in both subclasses so each returns a different
+# message.
+class EmailNotification(Notification):
+    def send(self):
+        return "Sending an email notification."
+
+
+class SMSNotification(Notification):
+    def send(self):
+        return "Sending an SMS notification."
+
+
+# 4. Create one object from each class and call send() on all of them.
+notification_1 = Notification()
+email_1 = EmailNotification()
+sms_1 = SMSNotification()
+
+for item in (notification_1, email_1, sms_1):
+    print(item.send())
+
+
+# 5. Explain in a comment which method is used when send() is called on each object.
+#
+# notification_1.send() uses Notification.send() directly, since notification_1
+# is a plain Notification with no override.
+# email_1.send() uses EmailNotification.send(): Python looks up a method
+# starting on the object's own class first, and only falls back to the parent
+# class if that class doesn't define one itself. Since EmailNotification 
+# defines its own send(), that's the one that runs.
+# sms_1.send() uses SMSNotification.send(), for the same reason.
