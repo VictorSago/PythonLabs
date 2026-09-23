@@ -288,3 +288,31 @@ for item in (notification_1, email_1, sms_1):
 # class if that class doesn't define one itself. Since EmailNotification 
 # defines its own send(), that's the one that runs.
 # sms_1.send() uses SMSNotification.send(), for the same reason.
+
+
+# ==========================================================
+# Part G - Override and still use the base method
+# ==========================================================
+
+# 1. Create a base class Report with a method get_summary() that
+# returns a general report summary.
+class Report:
+    def get_summary(self):
+        return "General report summary."
+
+
+# 2. Create SalesReport(Report) and override get_summary().
+# 3. Inside the overridden method, call the base implementation using
+# super() and add SalesReport-specific information.
+class SalesReport(Report):
+    def __init__(self, total_sales):
+        self.total_sales = total_sales
+
+    def get_summary(self):
+        base_summary = super().get_summary()
+        return f"{base_summary} Total sales: {self.total_sales:.2f} €."
+
+
+# 4. Create a SalesReport object and print the final result.
+sales_report_1 = SalesReport(15230.50)
+print(sales_report_1.get_summary())
