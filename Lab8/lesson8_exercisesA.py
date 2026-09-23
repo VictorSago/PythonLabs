@@ -198,3 +198,49 @@ except AttributeError as error:
 # defines, but the base class knows nothing about what its subclasses later
 # add. write_code() only exists on Developer, so a plain Employee object
 # has no such method at all.
+
+
+# ==========================================================
+# Part E - super() and shared initialization
+# ==========================================================
+
+# 1. Create a base class Device with brand and year.
+# 2. Add useful shared initialization logic inside Device, for example validation
+# that year cannot be negative and an attribute such as is_active=True.
+class Device:
+    def __init__(self, brand, year):
+        if year < 0:
+            raise ValueError("year cannot be negative")
+        self.brand = brand
+        self.year = year
+        self.is_active = True
+
+
+# 3. Create Laptop(Device) with one additional attribute such as ram_gb.
+class Laptop(Device):
+    def __init__(self, brand, year, ram_gb):
+        super().__init__(brand, year)
+        self.ram_gb = ram_gb
+
+
+# 4. Create another Device subclass with its own additional attribute and use super() again.
+class Smartphone(Device):
+    def __init__(self, brand, year, storage_gb):
+        super().__init__(brand, year)
+        self.storage_gb = storage_gb
+
+
+# 5. Demonstrate that both subclasses receive the shared initialization logic
+# from Device without duplicating it.
+laptop_1 = Laptop("Dell", 2023, 16)
+phone_1 = Smartphone("Samsung", 2022, 128)
+print(laptop_1.brand, "-", laptop_1.year, "- active:", laptop_1.is_active, "-", laptop_1.ram_gb, "GB RAM")
+print(phone_1.brand, "-", phone_1.year, "- active:", phone_1.is_active, "-", phone_1.storage_gb, "GB storage")
+
+# Neither Laptop nor Smartphone repeats the is_active=True assignment or the
+# year validation - both come from Device.__init__ via super(), so the
+# following also proves the validation applies to both subclasses.
+try:
+    Laptop("Broken", -5, 8)
+except ValueError as error:
+    print(f"Laptop('Broken', -5, 8) failed as expected: {error}")
