@@ -226,3 +226,47 @@ savings_1 = SavingsAccount("Arthur Dent", 1000, 0.03)
 
 print(account_1)
 print(savings_1)
+
+
+# ==========================================================
+# Part G - Inheritance or composition?
+# ==========================================================
+
+# 1. Create CPU with a model attribute.
+class CPU:
+    def __init__(self, model):
+        self.model = model
+
+
+# 2. Create Computer with brand and a CPU object. Use composition, not inheritance.
+class Computer:
+    def __init__(self, brand, cpu):
+        self.brand = brand
+        self.cpu = cpu
+
+
+# 3. Create a CPU object and pass it to a Computer object.
+cpu_1 = CPU("Intel Core i7")
+computer_1 = Computer("Dell", cpu_1)
+
+# 4. Print the computer brand and CPU model through the Computer object.
+print(computer_1.brand, "-", computer_1.cpu.model)
+
+# 5. In comments, explain why "Computer HAS-A CPU" makes more sense than "Computer IS-A CPU".
+#
+# A Computer is not a more specialized kind of CPU - it contains one, as a part
+# it depends on. Inheritance (IS-A) means "this is a specific version of that",
+# which does not describe how a computer relates to its processor. Composition
+# (HAS-A) correctly models "this is built from, or owns, that" instead - 
+# Computer.cpu holds a CPU object as an attribute, rather than Computer extending CPU.
+
+# 6. For each pair below, write whether you would most likely use inheritance (IS-A) or composition (HAS-A):
+#
+# Car / Engine: composition - a Car has an Engine as one of its parts; a Car
+#   is not a specialized kind of Engine.
+# Manager / Employee: inheritance - a Manager is a more specific kind of
+#   Employee, with everything a regular Employee has plus extra responsibilities.
+# Course / Teacher: composition - a Course has a Teacher assigned to it;
+#   a Course is not a specialized kind of Teacher.
+# Phone / Device: inheritance - a Phone is a more specific kind of Device, with
+#   everything a general Device has plus its own phone-specific behaviour.
