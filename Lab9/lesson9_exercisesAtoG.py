@@ -191,3 +191,38 @@ for product in (product_1, product_2, product_3):
 product_string = str(product_1)
 print(product_string)
 print(type(product_string))
+
+
+# ==========================================================
+# Part F - __str__ with inheritance
+# ==========================================================
+
+# 1. Create a base class Account with owner and balance.
+# 2. Add __str__ to Account.
+class Account:
+    def __init__(self, owner, balance):
+        self.owner = owner
+        self.balance = balance
+
+    def __str__(self):
+        return f"Account owned by {self.owner}, balance: {self.balance:.2f} €"
+
+
+# 3. Create SavingsAccount(Account) with an additional interest_rate attribute. Use super() in __init__.
+# 4. Override __str__ in SavingsAccount so its output also includes the interest rate.
+class SavingsAccount(Account):
+    def __init__(self, owner, balance, interest_rate):
+        super().__init__(owner, balance)
+        self.interest_rate = interest_rate
+
+    def __str__(self):
+        base_str = super().__str__()
+        return f"{base_str}, interest rate: {self.interest_rate:.2%}"
+
+
+# 5. Create and print both an Account and a SavingsAccount object.
+account_1 = Account("Ford Prefect", 500)
+savings_1 = SavingsAccount("Arthur Dent", 1000, 0.03)
+
+print(account_1)
+print(savings_1)
