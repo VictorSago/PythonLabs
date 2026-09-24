@@ -115,7 +115,6 @@ for device in devices:
 # Part D - isinstance()
 # ==========================================================
 
-
 # 1. Create a base class User and a subclass AdminUser(User).
 class User:
     def __init__(self, username):
@@ -149,3 +148,46 @@ print("admin_1 is a str:", is_string)
 # User. It correctly reports False for str, since AdminUser's inheritance
 # chain has nothing to do with str.
 
+
+# ==========================================================
+# Part E - __str__
+# ==========================================================
+
+# 1. Create a Product class with name and price.
+class ProductWithoutStr:
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
+
+
+# 2. Create one Product object and print it before defining __str__. Observe the result.
+product_without_str = ProductWithoutStr("Keyboard", 45.50)
+print(product_without_str)
+# The default output looks something like
+# <__main__.ProductWithoutStr object at 0x...> - it tells us the type
+# and where it lives in memory, but nothing about the actual product.
+
+
+
+# 3. Add __str__ so printing the Product gives a useful human-readable description.
+class Product:
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
+
+    def __str__(self):
+        return f"{self.name} - {self.price:.2f} €"
+
+
+# 4. Create at least three Product objects and print them.
+product_1 = Product("Wireless Mouse", 25.99)
+product_2 = Product("Keyboard", 45.50)
+product_3 = Product("Monitor", 199.99)
+
+for product in (product_1, product_2, product_3):
+    print(product)
+
+# 5. Use str() on one Product object, store the result in a variable and print its type.
+product_string = str(product_1)
+print(product_string)
+print(type(product_string))
