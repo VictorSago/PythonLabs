@@ -35,3 +35,41 @@ for notification in notifications:
 # method with that exact name, so the same line of code works uniformly across
 # every object in the list. This is polymorphism: one piece of code, many
 # possible object types, as long as each supports the method being called.
+
+
+# ==========================================================
+# Part B - Polymorphism with inheritance
+# ==========================================================
+
+# 1. Create a base class Document with a title attribute and a method describe().
+class Document:
+    def __init__(self, title):
+        self.title = title
+
+    def describe(self):
+        return "This is a general document."
+
+
+# 2. Create PDFDocument(Document) and TextDocument(Document).
+# 3. Override describe() in both subclasses so they return different descriptions.
+class PDFDocument(Document):
+    def describe(self):
+        return f"'{self.title}' is a PDF document."
+
+
+class TextDocument(Document):
+    def describe(self):
+        return f"'{self.title}' is a plain text document."
+
+
+# 4. Create several PDFDocument and TextDocument objects and store them in one list.
+documents = [
+    PDFDocument("Annual Report"),
+    TextDocument("Meeting Notes"),
+    PDFDocument("Invoice 2026-04"),
+    TextDocument("Todo List"),
+]
+
+# 5. Loop through the list and print each document's title and the result of describe().
+for document in documents:
+    print(document.title, "-", document.describe())
