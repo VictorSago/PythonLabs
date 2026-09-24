@@ -109,3 +109,43 @@ for device in devices:
 # Screen both independently define display_status(), the loop works for either
 # one. This is duck typing: "if it walks like a duck and quacks like a duck,
 # treat it as a duck" - what an object CAN DO matters more than what it formally IS.
+
+
+# ==========================================================
+# Part D - isinstance()
+# ==========================================================
+
+
+# 1. Create a base class User and a subclass AdminUser(User).
+class User:
+    def __init__(self, username):
+        self.username = username
+
+
+class AdminUser(User):
+    pass
+
+
+# 2. Create an AdminUser object.
+admin_1 = AdminUser("alice_admin")
+
+# 3. Use isinstance() to check whether the object is an AdminUser, a User and a string.
+is_admin_user = isinstance(admin_1, AdminUser)
+is_user = isinstance(admin_1, User)
+is_string = isinstance(admin_1, str)
+
+# 4. Print all three results.
+print("admin_1 is an AdminUser:", is_admin_user)
+print("admin_1 is a User:", is_user)
+print("admin_1 is a str:", is_string)
+
+# 5. In a comment, explain why the AdminUser object is also considered
+# an instance of User.
+#
+# AdminUser inherits from User, so every AdminUser object automatically has
+# everything a User has - it "is a" User as well as being its own, more
+# specific type. isinstance() checks an object's entire inheritance chain, not
+# just its exact class, which is why it reports True for both AdminUser and
+# User. It correctly reports False for str, since AdminUser's inheritance
+# chain has nothing to do with str.
+
