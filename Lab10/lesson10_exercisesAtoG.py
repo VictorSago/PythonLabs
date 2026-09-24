@@ -73,3 +73,39 @@ documents = [
 # 5. Loop through the list and print each document's title and the result of describe().
 for document in documents:
     print(document.title, "-", document.describe())
+
+
+# ==========================================================
+# Part C - Duck typing
+# ==========================================================
+
+# 1. Create two unrelated classes. Do not use inheritance between them.
+# 2. Give both classes a method called display_status().
+class Printer:
+    def display_status(self):
+        return "Printer is ready and has paper loaded."
+
+
+class Screen:
+    def display_status(self):
+        return "Screen is on and displaying content."
+
+
+# 3. Create objects from both classes and store them in the same list.
+printer_1 = Printer()
+screen_1 = Screen()
+devices = [printer_1, screen_1]
+
+# 4. Loop through the list and call display_status() on each object.
+for device in devices:
+    print(device.display_status())
+
+# 5. In a comment, explain why this works even though the classes do
+# not share a base class.
+#
+# Python does not check an object's class or inheritance chain before calling a
+# method - it only checks, at the moment display_status() is called, whether that
+# particular object happens to have a method by that name. Since Printer and 
+# Screen both independently define display_status(), the loop works for either
+# one. This is duck typing: "if it walks like a duck and quacks like a duck,
+# treat it as a duck" - what an object CAN DO matters more than what it formally IS.
